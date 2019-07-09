@@ -9,12 +9,12 @@ import _isEmpty from 'lodash/isEmpty'
 import _inRange from 'lodash/inRange'
 import _isFunction from 'lodash/isFunction'
 
-import AtSwipeActionOptions from './options/index'
+import SwipeActionOptions from './SwipeActionOptions'
 import './index.scss';
 import { delayGetClientRect, delayGetScrollOffset, uuid, } from '@/utils/dom'
 import {objectToString} from '@/utils/object';
 
-export default class AtSwipeAction extends Component {
+export default class SwipeAction extends Component {
     static options = {
         addGlobalClass: true
     }
@@ -226,7 +226,7 @@ export default class AtSwipeAction extends Component {
         </View>
 
         {Array.isArray(options) && options.length > 0 ? (
-          <AtSwipeActionOptions
+          <SwipeActionOptions
             options={options}
             componentId={componentId}
             onQueryedDom={this.handleDomInfo}
@@ -244,7 +244,7 @@ export default class AtSwipeAction extends Component {
                 <Text className='option__text'>{item.text}</Text>
               </View>
             ))}
-          </AtSwipeActionOptions>
+          </SwipeActionOptions>
         ) : null}
       </View>
     )
