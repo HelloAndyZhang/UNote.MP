@@ -19,7 +19,7 @@ export default class About extends Component {
   componentWillMount () { }
 
   componentDidMount () { }
-
+   
   componentWillUnmount () { }
 
   componentDidShow () { }

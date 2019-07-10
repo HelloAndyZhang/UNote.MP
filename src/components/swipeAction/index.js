@@ -1,4 +1,4 @@
-import Taro,{Component} from '@tarojs/taro'
+import Taro,{ Component }from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 
 import PropTypes from 'prop-types'
@@ -9,9 +9,9 @@ import _isEmpty from 'lodash/isEmpty'
 import _inRange from 'lodash/inRange'
 import _isFunction from 'lodash/isFunction'
 
-import SwipeActionOptions from './SwipeActionOptions'
+
 import './index.scss';
-import { delayGetClientRect, delayGetScrollOffset, uuid, } from '@/utils/dom'
+import { delayGetClientRect, delayGetScrollOffset, uuid,delayQuerySelector } from '@/utils/dom'
 import {objectToString} from '@/utils/object';
 
 export default class SwipeAction extends Component {
@@ -147,7 +147,7 @@ export default class SwipeAction extends Component {
       this.isMoving =
         y === 0 || x / y >= Math.tan((45 * Math.PI) / 180).toFixed(2)
     }
-
+	console.log('oooooo')
     if (this.isTouching && this.isMoving) {
       e.preventDefault()
 
@@ -156,7 +156,8 @@ export default class SwipeAction extends Component {
 
       if (this.state.offsetSize === 0 && isRight) return
 
-      const value = this.endValue + offsetSize
+	  const value = this.endValue + offsetSize
+	  console.log(value )
       this.setState({
         offsetSize: value >= 0 ? 0 : value
       })
@@ -177,7 +178,7 @@ export default class SwipeAction extends Component {
       this._reset(true)
       return this.handleOpened()
     }
-
+	
     this._reset()
     this.handleClosed()
   }
@@ -185,7 +186,8 @@ export default class SwipeAction extends Component {
   handleDomInfo = ({ width }) => {
     const { _isOpened } = this.state
 
-    this.maxOffsetSize = width
+	this.maxOffsetSize = width
+	
     this._reset(_isOpened)
   }
 
@@ -200,12 +202,22 @@ export default class SwipeAction extends Component {
       this.handleClosed()
     }
   }
-
+  trrigerOptionsDomUpadte () {
+    delayQuerySelector(
+      this,
+      `#swipeActionOptions-${this.state.componentId}`
+    ).then(res => {
+		this.handleDomInfo(res[0])
+    })
+  }  
   render () {
     const { offsetSize, componentId } = this.state
     const { options } = this.props
     const rootClass = classNames('at-swipe-action', this.props.className)
-
+    const rootClassTwo = classNames(
+      'at-swipe-action__options',
+      this.props.className
+    )
     return (
       <View
         id={`swipeAction-${componentId}`}
@@ -226,25 +238,24 @@ export default class SwipeAction extends Component {
         </View>
 
         {Array.isArray(options) && options.length > 0 ? (
-          <SwipeActionOptions
-            options={options}
-            componentId={componentId}
-            onQueryedDom={this.handleDomInfo}
-          >
-            {options.map((item, key) => (
-              <View
-                key={key}
-                style={item.style}
-                onClick={this.handleClick.bind(this, item, key)}
-                className={classNames(
-                  'at-swipe-action__option',
-                  item.className
-                )}
-              >
-                <Text className='option__text'>{item.text}</Text>
-              </View>
-            ))}
-          </SwipeActionOptions>
+			<View
+				id={`swipeActionOptions-${componentId}`}
+				className={rootClassTwo}
+				>
+				{options.map((item, key) => (
+					<View
+						key={key}
+						style={item.style}
+						onClick={this.handleClick.bind(this, item, key)}
+						className={classNames(
+						'at-swipe-action__option',
+							item.className
+						)}
+					>
+						<Text className='option__text'>{item.text}</Text>
+					</View>
+				))}
+			</View>
         ) : null}
       </View>
     )

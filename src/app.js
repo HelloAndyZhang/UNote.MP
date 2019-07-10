@@ -11,9 +11,8 @@ import './styles/index.scss'
 
 class App extends Component {
 
-  config = {
+  config = {   
     pages: [
-      'pages/about/index',
       'pages/index/index',
     ],
     window: {
