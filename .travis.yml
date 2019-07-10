@@ -12,6 +12,6 @@ jobs:
   include:
     - stage: test
       script:
+        - npm install -g @tarojs/cli
         - npm install
         - npm run dev:weapp
-        - npm run build:weapp
