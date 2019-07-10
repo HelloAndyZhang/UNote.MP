@@ -1,11 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Editor ,RichText } from '@tarojs/components'
 import { delayQuerySelectorCtx } from '@/utils/dom';
+import SwipeAction from '@/components/SwipeAction/index';
 import './index.scss'
 
-let config =[{
-  title:'加粗',
-}]
 export default class Index extends Component {
 
   config = {
@@ -36,50 +34,32 @@ export default class Index extends Component {
   componentWillUnmount () { }
 
   componentDidShow () { }
-
+  onClosed(){
+    console.log('onClosed')
+  }
+  onOpened(){
+    console.log('onOpened')
+  }
   componentDidHide () { }
-  goAbout(){
-    // this.$preload('key', 'val')
-  }
-  onStatusChange(event){
-    const formats = event.detail;
-    this.setState({
-      formats,
-    })
-  }
-  async onEditorReady(){
-    let res =  await delayQuerySelectorCtx(this,'#editor');
-    if(res){
-      console.log(res);
-       this.editorCtx = res.context
-     }
-  }
-  handleEditorCtx(){
-    this.editorCtx.getContents({success:(res)=>{ 
-        console.log(res) 
-        this.setState({
-          nodes:res.html
-        })
-      }})
-  }
-
   render () {
-    let placeholder = '留下生活留下感动'
     return (
       <View className='index'>
-        <Text className='text'> 1313131</Text>
-        <Editor
-          id="editor"
-          class="editor"
-          placeholder={placeholder}
-          showImgSize
-          showImgToolbar
-          showImgResize
-          onStatusChange={this.onStatusChange.bind(this)}
-          onReady={this.onEditorReady.bind(this)}>
-        </Editor>
-        <View className='btn'onClick={this.handleEditorCtx.bind(this)} > 保存</View>
-        <RichText nodes={this.state.nodes} />
+            <SwipeAction options={[{
+                text: '取消',
+                style: {
+                  backgroundColor: '#6190E8'
+                }
+              },{
+                  text: '确认',
+                  style: {
+                  backgroundColor: '#FF4949'
+                }
+              }]} className='cell' onOpened={this.onOpened} onClosed={this.onClosed}>
+              <View className='normal'>AtSwipeAction 一般使用场景</View>
+             </SwipeAction>
+
+
+
       </View>
     )
   }

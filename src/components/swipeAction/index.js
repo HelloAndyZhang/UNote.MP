@@ -1,6 +1,6 @@
 import Taro,{ Component }from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-
+import './index.scss';
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 
@@ -9,8 +9,6 @@ import _isEmpty from 'lodash/isEmpty'
 import _inRange from 'lodash/inRange'
 import _isFunction from 'lodash/isFunction'
 
-
-import './index.scss';
 import { delayGetClientRect, delayGetScrollOffset, uuid,delayQuerySelector } from '@/utils/dom'
 import {objectToString} from '@/utils/object';
 
@@ -38,7 +36,9 @@ export default class SwipeAction extends Component {
       _isOpened: isOpened
     }
   }
-
+  componentDidMount () {
+    this.trrigerOptionsDomUpadte()
+  }
   getDomInfo () {
     this.domInfo = {}
     return Promise.all([
@@ -54,8 +54,6 @@ export default class SwipeAction extends Component {
       this.domInfo = rect[0]
     })
   }
-
-
   /**
    * 合并 style
    * @param {Object|String} style1
@@ -101,7 +99,8 @@ export default class SwipeAction extends Component {
   computeTransform = value => {
     if (Taro.getEnv() === Taro.ENV_TYPE.ALIPAY) {
       return !_isNil(value) ? `translate3d(${value}px,0,0)` : null
-    }
+	}
+	console.log(value +'XXX')
     return value ? `translate3d(${value}px,0,0)` : null
   }
 
@@ -119,11 +118,8 @@ export default class SwipeAction extends Component {
 
   handleTouchStart = e => {
     const { clientX, clientY } = e.touches[0]
-
     if (this.props.disabled) return
-
     this.getDomInfo()
-
     this.startX = clientX
     this.startY = clientY
     this.isTouching = true
@@ -147,13 +143,12 @@ export default class SwipeAction extends Component {
       this.isMoving =
         y === 0 || x / y >= Math.tan((45 * Math.PI) / 180).toFixed(2)
     }
-	console.log('oooooo')
     if (this.isTouching && this.isMoving) {
       e.preventDefault()
 
       const offsetSize = clientX - this.startX
       const isRight = offsetSize > 0
-
+		console.info(isRight)
       if (this.state.offsetSize === 0 && isRight) return
 
 	  const value = this.endValue + offsetSize
@@ -166,14 +161,10 @@ export default class SwipeAction extends Component {
 
   handleTouchEnd = () => {
     this.isTouching = false
-
     const { offsetSize } = this.state
-
     this.endValue = offsetSize
-
     const breakpoint = this.maxOffsetSize / 2
     const absOffsetSize = Math.abs(offsetSize)
-
     if (absOffsetSize > breakpoint) {
       this._reset(true)
       return this.handleOpened()
@@ -185,9 +176,7 @@ export default class SwipeAction extends Component {
 
   handleDomInfo = ({ width }) => {
     const { _isOpened } = this.state
-
 	this.maxOffsetSize = width
-	
     this._reset(_isOpened)
   }
 
@@ -207,17 +196,14 @@ export default class SwipeAction extends Component {
       this,
       `#swipeActionOptions-${this.state.componentId}`
     ).then(res => {
-		this.handleDomInfo(res[0])
+      this.handleDomInfo(res[0])
     })
   }  
   render () {
     const { offsetSize, componentId } = this.state
     const { options } = this.props
     const rootClass = classNames('at-swipe-action', this.props.className)
-    const rootClassTwo = classNames(
-      'at-swipe-action__options',
-      this.props.className
-    )
+    const rootClassTwo = classNames('at-swipe-action__options')
     return (
       <View
         id={`swipeAction-${componentId}`}
@@ -237,26 +223,28 @@ export default class SwipeAction extends Component {
           {this.props.children}
         </View>
 
-        {Array.isArray(options) && options.length > 0 ? (
-			<View
-				id={`swipeActionOptions-${componentId}`}
-				className={rootClassTwo}
-				>
-				{options.map((item, key) => (
-					<View
-						key={key}
-						style={item.style}
-						onClick={this.handleClick.bind(this, item, key)}
-						className={classNames(
-						'at-swipe-action__option',
-							item.className
-						)}
+		{Array.isArray(options) && options.length > 0 ? 
+			(
+				<View
+					id={`swipeActionOptions-${componentId}`}
+					className={rootClassTwo}
 					>
-						<Text className='option__text'>{item.text}</Text>
-					</View>
-				))}
-			</View>
-        ) : null}
+					{options.map((item, key) => (
+						<View
+							key={key}
+							style={item.style}
+							onClick={this.handleClick.bind(this, item, key)}
+							className={classNames(
+							'at-swipe-action__option',
+								item.className
+							)}
+						>
+							<Text className='option__text'>{item.text}</Text>
+						</View>
+					))}
+				</View>
+			) : null
+		}
       </View>
     )
   }
