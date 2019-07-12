@@ -1,6 +1,6 @@
 @import '../../styles/default';
 @import '../../styles/mixin.scss';
-.at-swipe-action {
+.swipe-action {
   position: relative;
   overflow: hidden;
 
@@ -8,7 +8,7 @@
   &__content {
     position: relative;
     font-size: $font-size-lg;
-    background-color: $at-swipe-action-bg-color;
+    background-color: $swipe-action-bg-color;
     z-index: 2;
 
     &.animtion {
@@ -22,10 +22,10 @@
     display: inline-flex;
     padding: 0 $spacing-h-xl;
     height: 100%;
-    color: $at-swipe-action-color;
-    font-size: $at-swipe-action-font-size;
+    color: $swipe-action-color;
+    font-size: $swipe-action-font-size;
     text-align: center;
-    background-color: $at-swipe-action-option-bg-color;
+    background-color: $swipe-action-option-bg-color;
   }
 
   &__options {

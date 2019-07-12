@@ -131,13 +131,10 @@ export default class SwipeAction extends Component {
     }
     if (this.isTouching && this.isMoving) {
       e.preventDefault()
-
       const offsetSize = clientX - this.startX
       const isRight = offsetSize > 0
       if (this.state.offsetSize === 0 && isRight) return
-
-	  const value = this.endValue + offsetSize
-
+	    const value = this.endValue + offsetSize
       this.setState({
         offsetSize: value >= 0 ? 0 : value
       })
@@ -161,7 +158,7 @@ export default class SwipeAction extends Component {
 
   handleDomInfo = ({ width }) => {
     const { _isOpened } = this.state
-	this.maxOffsetSize = width
+	  this.maxOffsetSize = width
     this._reset(_isOpened)
   }
 
@@ -187,8 +184,8 @@ export default class SwipeAction extends Component {
   render () {
     const { offsetSize, componentId } = this.state
     const { options } = this.props
-    const rootClass = classNames('at-swipe-action', this.props.className)
-    const rootClassTwo = classNames('at-swipe-action__options')
+    const rootClass = classNames('swipe-action', this.props.className)
+    const rootClassTwo = classNames('swipe-action__options')
     return (
       <View
         id={`swipeAction-${componentId}`}
@@ -198,7 +195,7 @@ export default class SwipeAction extends Component {
         onTouchStart={this.handleTouchStart}
       >
         <View
-          className={classNames('at-swipe-action__content', {
+          className={classNames('swipe-action__content', {
             animtion: !this.isTouching
           })}
           style={{
@@ -220,7 +217,7 @@ export default class SwipeAction extends Component {
 							style={item.style}
 							onClick={this.handleClick.bind(this, item, key)}
 							className={classNames(
-							'at-swipe-action__option',
+							'swipe-action__option',
 								item.className
 							)}
 						>

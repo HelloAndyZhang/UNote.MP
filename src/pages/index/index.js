@@ -7,7 +7,8 @@ import './index.scss'
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '我的优笔记'
+	navigationBarTitleText: '我的优笔记',
+	disableScroll: true
   }                   
   constructor(){
     super()
@@ -97,6 +98,9 @@ export default class Index extends Component {
 		config
 	  })
   }
+  handleClick = (item, key, e) => {
+    console.log('触发了点击', item, key, e)
+  }
   componentDidHide () { }
   render () {
 	let {config} = this.state;
@@ -109,6 +113,7 @@ export default class Index extends Component {
 					onOpened={this.handleSingle.bind(this, index)}
 					isOpened={item.isOpened}
 					options={item.options}
+					onClick={this.handleClick} 
 					className='cell'>
 					<View className='normal'>{item.title}</View>
 				</SwipeAction>
