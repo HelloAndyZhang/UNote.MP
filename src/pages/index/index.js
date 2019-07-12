@@ -7,15 +7,68 @@ import './index.scss'
 export default class Index extends Component {
 
   config = {
-    navigationBarTitleText: '我的优秀笔记'
+    navigationBarTitleText: '我的优笔记'
   }                   
   constructor(){
     super()
-    this.state ={
-        formats:[],
-        nodes: []
-
-    }
+    this.state ={}
+	this.config =[{
+		options:[{
+			text: '取消',
+			style: {
+			  backgroundColor: '#6190E8'
+			}
+		  },{
+			  text: '确认',
+			  style: {
+			  backgroundColor: '#FF4949'
+			}
+		}],
+		isOpened:false,
+		title:'AtSwipeAction 一般使用场景'
+	},{
+		options:[{
+			text: '取消',
+			style: {
+			  backgroundColor: '#6190E8'
+			}
+		  },{
+			  text: '确认',
+			  style: {
+			  backgroundColor: '#FF4949'
+			}
+		}],
+		isOpened:false,
+		title:'AtSwipeAction 一般使用场景'
+	},{
+		options:[{
+			text: '取消',
+			style: {
+			  backgroundColor: '#6190E8'
+			}
+		  },{
+			  text: '确认',
+			  style: {
+			  backgroundColor: '#FF4949'
+			}
+		}],
+		isOpened:false,
+		title:'AtSwipeAction 一般使用场景'
+	},{
+		options:[{
+			text: '取消',
+			style: {
+			  backgroundColor: '#6190E8'
+			}
+		  },{
+			  text: '确认',
+			  style: {
+			  backgroundColor: '#FF4949'
+			}
+		}],
+		isOpened:false,
+		title:'AtSwipeAction 一般使用场景'
+	},]
     this.editorCtx = null; // 编辑器上下文
   }
   //分享
@@ -34,32 +87,25 @@ export default class Index extends Component {
   componentWillUnmount () { }
 
   componentDidShow () { }
-  onClosed(){
-    console.log('onClosed')
-  }
-  onOpened(){
-    console.log('onOpened')
+  handleSingle(index){
   }
   componentDidHide () { }
   render () {
     return (
       <View className='index'>
-            <SwipeAction options={[{
-                text: '取消',
-                style: {
-                  backgroundColor: '#6190E8'
-                }
-              },{
-                  text: '确认',
-                  style: {
-                  backgroundColor: '#FF4949'
-                }
-              }]} className='cell' onOpened={this.onOpened} onClosed={this.onClosed}>
-              <View className='normal'>AtSwipeAction 一般使用场景</View>
-             </SwipeAction>
-
-
-
+		{
+			this.config.map((item, index) => (
+				<SwipeAction
+					key={index}
+					onOpened={this.handleSingle.bind(this, index)}
+					isOpened={item.isOpened}
+					options={item.options}
+					className='cell'
+				>
+					<View className='normal'>{item.title}</View>
+				</SwipeAction>
+			))
+		}
       </View>
     )
   }
