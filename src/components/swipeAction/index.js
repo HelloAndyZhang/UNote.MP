@@ -10,7 +10,7 @@ import _inRange from 'lodash/inRange'
 import _isFunction from 'lodash/isFunction'
 
 import { delayGetClientRect, delayGetScrollOffset, uuid,delayQuerySelector } from '@/utils/dom'
-import {objectToString} from '@/utils/object';
+
 
 export default class SwipeAction extends Component {
     static options = {
@@ -54,20 +54,7 @@ export default class SwipeAction extends Component {
       this.domInfo = rect[0]
     })
   }
-  /**
-   * 合并 style
-   * @param {Object|String} style1
-   * @param {Object|String} style2
-   * @returns {String}
-   */
-  mergeStyle (style1, style2) {
-    if ((style1 && typeof style1 === 'object')
-      && (style2 && typeof style2 === 'object')
-    ) {
-      return Object.assign({}, style1, style2)
-    }
-    return objectToString(style1) + objectToString(style2)
-  }
+
   componentWillReceiveProps (nextProps) {
     const { isOpened } = nextProps
     const { _isOpened } = this.state
@@ -99,8 +86,7 @@ export default class SwipeAction extends Component {
   computeTransform = value => {
     if (Taro.getEnv() === Taro.ENV_TYPE.ALIPAY) {
       return !_isNil(value) ? `translate3d(${value}px,0,0)` : null
-	}
-	console.log(value +'XXX')
+    }
     return value ? `translate3d(${value}px,0,0)` : null
   }
 
@@ -148,11 +134,10 @@ export default class SwipeAction extends Component {
 
       const offsetSize = clientX - this.startX
       const isRight = offsetSize > 0
-		console.info(isRight)
       if (this.state.offsetSize === 0 && isRight) return
 
 	  const value = this.endValue + offsetSize
-	  console.log(value )
+
       this.setState({
         offsetSize: value >= 0 ? 0 : value
       })

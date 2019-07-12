@@ -1,4 +1,5 @@
 import Taro from '@tarojs/taro'
+import {objectToString} from './object';
 const ENV = Taro.getEnv()
 const delay = function (delayTime = 500) {
     return new Promise(resolve => {
@@ -197,6 +198,20 @@ const pxTransform = (size) => {
     if (!size) return ''
     return Taro.pxTransform(size)
 }
+  /**
+   * 合并 style
+   * @param {Object|String} style1
+   * @param {Object|String} style2
+   * @returns {String}
+   */
+const  mergeStyle =(style1, style2)=> {
+    if ((style1 && typeof style1 === 'object')
+      && (style2 && typeof style2 === 'object')
+    ) {
+      return Object.assign({}, style1, style2)
+    }
+    return objectToString(style1) + objectToString(style2)
+}
 export {
     delayQuerySelector,
     delayQuerySelectorCtx,
@@ -207,6 +222,7 @@ export {
     handleTouchScroll,
     delayGetClientRect,
     delayGetScrollOffset,
+    mergeStyle
 }
 
 
