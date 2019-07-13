@@ -1,7 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Editor ,RichText } from '@tarojs/components'
 import { delayQuerySelectorCtx } from '@/utils/dom';
-import SwipeAction from '@/components/SwipeAction/index';
+import SwipeAction from '@/components/swipe-action/index';
+import Noticebar from '@/components/noticebar/index';
 import './index.scss'
 
 export default class Index extends Component {
@@ -106,6 +107,9 @@ export default class Index extends Component {
 	let {config} = this.state;
     return (
       <View className='index'>
+		<Noticebar  marquee icon='volume-plus'>
+			这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，
+		</Noticebar>
 		{
 			config.map((item, index) => (
 				<SwipeAction

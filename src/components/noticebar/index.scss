@@ -1,0 +1,139 @@
+@import '../../styles/index';
+.noticebar {
+  position: relative;
+  padding: $spacing-v-sm $spacing-h-lg;
+  color: $noticebar-text-color;
+  font-size: 0;
+  background: $noticebar-bg-color;
+
+  /* elements */
+  &__content {
+    line-height: $line-height-zh;
+    word-break: break-all;
+    word-wrap: break-word;
+
+    &-icon {
+      display: inline-block;
+      margin-right: 12px;
+      vertical-align: top;
+
+      .icon {
+        font-size: $noticebar-icon-size;
+        line-height: $noticebar-font-size * 1.5;
+      }
+    }
+
+    &-text {
+      display: inline;
+      font-size: $noticebar-font-size;
+    }
+
+    &-inner {
+      display: inline;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: 50%;
+    left: $spacing-h-lg;
+    width: $noticebar-btn-close-size;
+    height: $noticebar-btn-close-size;
+    transform: translate3d(0, -50%, 0);
+
+    .at-icon {
+      color: $noticebar-btn-close-color;
+      font-size: $noticebar-btn-close-size;
+    }
+
+    + .at-noticebar__content {
+      margin-left: 50px;
+    }
+  }
+
+  &__more {
+    color: $color-grey-2;
+    font-size: 0;
+
+    .text {
+      font-size: $noticebar-font-size;
+      line-height: $line-height-zh;
+      vertical-align: middle;
+    }
+
+    &-icon {
+      display: inline-block;
+      width: $noticebar-font-size;
+      vertical-align: middle;
+      overflow: hidden;
+
+      .at-icon {
+        font-size: $noticebar-font-size;
+      }
+    }
+  }
+
+  /* modifiers */
+  &--single {
+    display: flex;
+    justify-content: space-between;
+
+    .at-noticebar__content {
+      flex: 1;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+
+      &-text {
+        display: flex;
+        overflow: hidden;
+      }
+
+      &-inner {
+        flex: 1;
+        @include line(1);
+      }
+    }
+  }
+
+  &--marquee {
+    .noticebar__content {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      overflow: hidden;
+
+      &-text {
+        flex: 1;
+        overflow: hidden;
+      }
+
+      &-inner {
+        display: inline-block;
+        white-space: nowrap;
+        padding-left: 100%;
+        height: $noticebar-font-size * 1.5;
+        animation: marquee 1s linear infinite both;
+        transform: translateZ(0);
+      }
+    }
+  }
+
+  &--more {
+    .noticebar__content {
+      max-width: 525px;
+    }
+  }
+
+  &--weapp {
+    .noticebar__content-inner {
+      animation: none;
+    }
+  }
+}
+
+@keyframes marquee {
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
