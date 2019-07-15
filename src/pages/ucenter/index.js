@@ -8,71 +8,12 @@ import './index.scss'
 export default class Index extends Component {
 
   config = {
-	navigationBarTitleText: '我的优笔记',
+	navigationBarTitleText: '我的',
 	disableScroll: true
   }                   
   constructor(){
     super()
-    this.state ={
-		config:[{
-			options:[{
-				text: '取消',
-				style: {
-				  backgroundColor: '#6190E8'
-				}
-			  },{
-				  text: '确认',
-				  style: {
-				  backgroundColor: '#FF4949'
-				}
-			}],
-			isOpened:false,
-			title:'AtSwipeAction 一般使用场景'
-		},{
-			options:[{
-				text: '取消',
-				style: {
-				  backgroundColor: '#6190E8'
-				}
-			  },{
-				  text: '确认',
-				  style: {
-				  backgroundColor: '#FF4949'
-				}
-			}],
-			isOpened:false,
-			title:'AtSwipeAction 一般使用场景'
-		},{
-			options:[{
-				text: '取消',
-				style: {
-				  backgroundColor: '#6190E8'
-				}
-			  },{
-				  text: '确认',
-				  style: {
-				  backgroundColor: '#FF4949'
-				}
-			}],
-			isOpened:false,
-			title:'AtSwipeAction 一般使用场景'
-		},{
-			options:[{
-				text: '取消',
-				style: {
-				  backgroundColor: '#6190E8'
-				}
-			  },{
-				  text: '确认',
-				  style: {
-				  backgroundColor: '#FF4949'
-				}
-			}],
-			isOpened:false,
-			title:'AtSwipeAction 一般使用场景'
-		},]
-	}
-    this.editorCtx = null; // 编辑器上下文
+    this.state ={}
   }
   //分享
   onShareAppMessage() {

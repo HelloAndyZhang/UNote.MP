@@ -24,28 +24,29 @@ class App extends Component {
       navigationBarTextStyle: 'black'
     },
     tabBar:{
-        borderStyle:"white",
+        color:'#D9DCE0',
+        borderStyle:"black",
         position: "bottom",
         backgroundColor:'#ffffff',
-        selectedColor:'#D9DCE0',
+        selectedColor:'#555555',
         list: [
           {
             pagePath: "pages/index/index",
             text: "列表",
-            iconPath: "./assets/tab-bar/list_on.png",
-            selectedIconPath: "./assets/tab-bar/list.png"
+            iconPath: "./assets/tab-bar/list.png",
+            selectedIconPath: "./assets/tab-bar/list_on.png"
           },
           {
             pagePath: "pages/folder/index",
             text: "文件夹",
-            iconPath: "./assets/tab-bar/folder_on.png",
-            selectedIconPath: "./assets/tab-bar/folder.png"
+            iconPath: "./assets/tab-bar/folder.png",
+            selectedIconPath: "./assets/tab-bar/folder_on.png"
           },
           {
             pagePath: "pages/ucenter/index",
             text: "我的",
-            iconPath: "./assets/tab-bar/mine_on.png",
-            selectedIconPath: "./assets/tab-bar/mine.png"
+            iconPath: "./assets/tab-bar/mine.png",
+            selectedIconPath: "./assets/tab-bar/mine_on.png"
           },
         ]
       }

@@ -18,10 +18,12 @@ const delayQuerySelector = function (self, selectorStr, delayTime = 500) {
     const selector = Taro.createSelectorQuery().in($scope)
     return new Promise(resolve => {
         delay(delayTime).then(() => {
+            console.log(selectorStr )
             selector
                 .select(selectorStr)
                 .boundingClientRect()
                 .exec((res) => {
+                    console.log(res)
                     resolve(res)
                 })
         })
@@ -96,7 +98,7 @@ const uuid = (len = 8, radix = 16) => {
             }
         }
     }
-
+    console.log(value.join(''))
     return value.join('')
 }
 const getEventDetail = (event) => {

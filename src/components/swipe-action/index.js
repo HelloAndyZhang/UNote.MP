@@ -37,14 +37,14 @@ export default class SwipeAction extends Component {
 		this.isTouching = false
 
 		this.state = {
-			componentId: uuid(),
+			componentId:uuid(),
 			offsetSize: 0,
 			_isOpened: isOpened
 		}
 	}
-	componentDidMount() {
-		this.trrigerOptionsDomUpadte()
-	}
+    componentWillMount(){
+        this.trrigerOptionsDomUpadte()
+    }
 	getDomInfo() {
 		this.domInfo = {}
 		return Promise.all([
@@ -163,6 +163,7 @@ export default class SwipeAction extends Component {
 	}
 
 	handleDomInfo = ({ width }) => {
+        
 		const { _isOpened } = this.state
 		this.maxOffsetSize = width
 		this._reset(_isOpened)
