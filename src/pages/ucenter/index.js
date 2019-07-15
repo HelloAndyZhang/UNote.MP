@@ -106,23 +106,8 @@ export default class Index extends Component {
   render () {
 	let {config} = this.state;
     return (
-      <View className='index'>
-		{/* <Noticebar  marquee icon='volume-plus'>
-			这是 NoticeBar 通告栏，这是 NoticeBar 通告栏，
-		</Noticebar>
-		{
-			config.map((item, index) => (
-				<SwipeAction
-					key={index}
-					onOpened={this.handleSingle.bind(this, index)}
-					isOpened={item.isOpened}
-					options={item.options}
-					onClick={this.handleClick} 
-					className='cell'>
-					<View className='normal'>{item.title}</View>
-				</SwipeAction>
-			))
-		} */}
+      <View className='page-ucenter'>
+          我的
       </View>
     )
   }

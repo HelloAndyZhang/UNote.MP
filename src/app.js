@@ -13,14 +13,42 @@ class App extends Component {
 
   config = {   
     pages: [
-      'pages/index/index'
+      'pages/index/index',
+      'pages/folder/index',
+      'pages/ucenter/index',
     ],
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '我的优笔记',
       navigationBarTextStyle: 'black'
-    }
+    },
+    tabBar:{
+        borderStyle:"white",
+        position: "bottom",
+        backgroundColor:'#ffffff',
+        selectedColor:'#D9DCE0',
+        list: [
+          {
+            pagePath: "pages/index/index",
+            text: "列表",
+            iconPath: "./assets/tab-bar/list_on.png",
+            selectedIconPath: "./assets/tab-bar/list.png"
+          },
+          {
+            pagePath: "pages/folder/index",
+            text: "文件夹",
+            iconPath: "./assets/tab-bar/folder_on.png",
+            selectedIconPath: "./assets/tab-bar/folder.png"
+          },
+          {
+            pagePath: "pages/ucenter/index",
+            text: "我的",
+            iconPath: "./assets/tab-bar/mine_on.png",
+            selectedIconPath: "./assets/tab-bar/mine.png"
+          },
+        ]
+      }
   }
 
   componentDidMount () {}
