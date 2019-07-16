@@ -47,6 +47,7 @@ export default class Index extends Component {
     componentWillUnmount() { }
 
     componentDidShow() { }
+    //初始化生成数据
     init(){
         const num = Math.floor(Math.random()*(25-10)+10);
         let config =[]
@@ -75,6 +76,7 @@ export default class Index extends Component {
             config
         })
     }
+    //随机生成时间
     getRandomDateBetween() { // 生成当前时间一个月内的随机时间。
         var date = new Date();
         var e = date.getTime();//当前时间的秒数
@@ -87,6 +89,7 @@ export default class Index extends Component {
         var num = Min + Math.round(Rand * Range); //四舍五入
         return num;
     }
+    //滑动单元格时触发
     handleSingle(index) {
         const config = this.state.config.map((item, key) => {
             item.isOpened = key === index
@@ -98,6 +101,7 @@ export default class Index extends Component {
             noteIndex: index, 
         })
     }
+    //点击单元格时触发
     handleClick = (item, key, e) => {
         console.log('触发了点击', item, key, e)
         let {noteIndex,config } = this.state;
