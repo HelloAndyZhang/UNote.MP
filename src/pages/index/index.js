@@ -12,7 +12,7 @@ export default class Index extends Component {
     config = {
         navigationBarTitleText: '我的优笔记',
         // disableScroll: true
-    }
+    }       
     constructor(props) {
         super(props)
         this.state = {
@@ -152,6 +152,7 @@ export default class Index extends Component {
     }
     //修改笔记名字
     handleNoteRename(event){
+        console.log(event)
         this.setState({
             noteIndexName:event.target.value
         })
