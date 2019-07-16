@@ -152,10 +152,9 @@ export default class Index extends Component {
     }
     //修改笔记名字
     handleNoteRename(event){
-        console.log(event)
         this.setState({
             noteIndexName:event.target.value
-        })
+        })    
     }
     componentDidHide() { }
     render() {
