@@ -18,10 +18,11 @@ class App extends Component {
       'pages/ucenter/index',
     ],
     window: {
-      backgroundTextStyle: 'light',
+      backgroundTextStyle: 'dark',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '我的优笔记',
-      navigationBarTextStyle: 'black'
+      navigationBarTextStyle: 'black',
+      enablePullDownRefresh:true,
     },
     tabBar:{
         color:'#D9DCE0',

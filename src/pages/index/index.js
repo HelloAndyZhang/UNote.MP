@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Input, } from '@tarojs/components'
 import SwipeAction from '@/components/swipe-action/index';
 import Modal from '@/components/modal/index';
+import Utils from '@/utils/index'
 import './index.scss'
 
 export default class Index extends Component {
@@ -10,76 +11,12 @@ export default class Index extends Component {
     }
     config = {
         navigationBarTitleText: '我的优笔记',
-        disableScroll: true
+        // disableScroll: true
     }
     constructor(props) {
         super(props)
         this.state = {
-            config: [{
-                options: [{
-                    text: '重命名',
-                    style: {
-                        backgroundColor: '#6190E8'
-                    },
-                    index:1
-                }, {
-                    text: '删除',
-                    style: {
-                        backgroundColor: '#FF4949'
-                    },
-                    index:2
-                }],
-                isOpened: false,
-                title: '2019年开发排期表'
-            }, {
-                options: [{
-                    text: '重命名',
-                    style: {
-                        backgroundColor: '#6190E8'
-                    },
-                    index:1
-                }, {
-                    text: '删除',
-                    style: {
-                        backgroundColor: '#FF4949'
-                    },
-                    index:2
-                }],
-                isOpened: false,
-                title: '2019年开发排期表'
-            }, {
-                options: [{
-                    text: '重命名',
-                    style: {
-                        backgroundColor: '#6190E8'
-                    },
-                    index:1
-                }, {
-                    text: '删除',
-                    style: {
-                        backgroundColor: '#FF4949'
-                    },
-                    index:2
-                }],
-                isOpened: false,
-                title: '2019年开发排期表'
-            }, {
-                options: [{
-                    text: '重命名',
-                    style: {
-                        backgroundColor: '#6190E8'
-                    },
-                    index:1
-                }, {
-                    text: '删除',
-                    style: {
-                        backgroundColor: '#FF4949'
-                    },
-                    index:2
-                }],
-                isOpened: false,
-                title: '2019年开发排期表'
-            }],
+            config: [],
             isOpened:false,
             noteIndexName:'',
             noteIndex:null
@@ -95,17 +32,60 @@ export default class Index extends Component {
     componentWillPreload() {
 
     }
-    componentWillMount() { }
-
+    componentWillMount() { 
+        this.init()
+    }
+    //下拉刷新
+    onPullDownRefresh(){
+        this.init()
+        setTimeout(()=>{
+            Taro.stopPullDownRefresh();
+        },600)
+    }
     componentDidMount() { }
 
     componentWillUnmount() { }
 
     componentDidShow() { }
-    componentDidHide(){
+    init(){
+        const num = Math.floor(Math.random()*(25-10)+10);
+        let config =[]
+        for(let i=0;i<num; i++){
+            config.push({
+                options: [{
+                    text: '重命名',
+                    style: {
+                        backgroundColor: '#6190E8'
+                    },
+                    index:1
+                }, {
+                    text: '删除',
+                    style: {
+                        backgroundColor: '#FF4949'
+                    },
+                    index:2
+                }],
+                isOpened: false,
+                title: '2019年开发排期表',
+                time: Utils.formatTime(this.getRandomDateBetween())
+            })
+        }
+        console.log(config)
         this.setState({
-            isOpened:false,            
+            config
         })
+    }
+    getRandomDateBetween() { // 生成当前时间一个月内的随机时间。
+        var date = new Date();
+        var e = date.getTime();//当前时间的秒数
+        var f = date.getTime()-(30*24*60*60*1000); //30天之前的秒数，
+        return new Date(this.RandomNumBoth(f,e));
+    }
+    RandomNumBoth(Min,Max){
+        var Range = Max - Min;
+        var Rand = Math.random();
+        var num = Min + Math.round(Rand * Range); //四舍五入
+        return num;
     }
     handleSingle(index) {
         const config = this.state.config.map((item, key) => {
@@ -177,6 +157,7 @@ export default class Index extends Component {
         let { config,isOpened } = this.state;
         return (
             <View className='index'>
+
                 {
                     config.map((item, index) => (
                         <SwipeAction
@@ -188,12 +169,14 @@ export default class Index extends Component {
                             className='u-cell-item'>
                             <View className='item'>
                                 <View className='title'>{item.title}</View>
-                                <View className='time'>05-18 17:18</View>
+                                <View className='time'>{item.time}</View>
                             </View>
                         </SwipeAction>
                     ))
                 }
-
+                <View className='no_more'>
+                    <Text>没有更多了</Text>
+                </View>
                 <Modal
                     isOpened={isOpened}
                     title='重命名'
@@ -208,6 +191,10 @@ export default class Index extends Component {
                         <Input className='input' value={noteIndexName} onInput={this.handleNoteRename.bind(this)} />
                     </View>
                 </Modal>
+
+                <View className='open_btn'>
+                    <Text className='iconfont icon-jiahao icon'></Text>
+                </View>
             </View>
         )
     }
