@@ -11,6 +11,7 @@ export default class Index extends Component {
     }
     config = {
         navigationBarTitleText: '我的优笔记',
+        enablePullDownRefresh:true,
     }       
     constructor(props) {
         super(props)
