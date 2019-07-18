@@ -11,7 +11,6 @@ export default class Index extends Component {
     }
     config = {
         navigationBarTitleText: '我的优笔记',
-        // disableScroll: true
     }       
     constructor(props) {
         super(props)
@@ -156,6 +155,11 @@ export default class Index extends Component {
             noteIndexName:event.target.value
         })    
     }
+    goCreateNote(){
+        Taro.navigateTo({
+            url:'/pages/create-note/index'
+        })
+    }
     componentDidHide() { }
     render() {
         let { config,isOpened } = this.state;
@@ -196,7 +200,7 @@ export default class Index extends Component {
                     </View>
                 </Modal>
 
-                <View className='open_btn'>
+                <View className='open_btn' onClick={this.goCreateNote.bind(this)}>
                     <Text className='iconfont icon-jiahao icon'></Text>
                 </View>
             </View>

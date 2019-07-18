@@ -16,13 +16,13 @@ class App extends Component {
       'pages/index/index',
       'pages/folder/index',
       'pages/ucenter/index',
+      'pages/create-note/index'
     ],
     window: {
       backgroundTextStyle: 'dark',
       navigationBarBackgroundColor: '#fff',
       navigationBarTitleText: '我的优笔记',
       navigationBarTextStyle: 'black',
-      enablePullDownRefresh:true,
     },
     tabBar:{
         color:'#D9DCE0',

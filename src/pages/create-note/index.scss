@@ -1,0 +1,53 @@
+.page-create{
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    .header{
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e5e5e5;
+        .tool-bar{
+            height: 80px;
+            flex: 1;
+            overflow-x: auto;
+            white-space: nowrap;
+            &__item{
+                line-height: 80px;
+                display: inline-block;
+                font-size: 40px;
+                margin: 0 30px;
+            }
+        }
+        .save_btn{
+            width: 80px;
+            height: 80px;
+            text-align: center;
+            line-height: 80px;
+            box-shadow: -2px 0 6px -1px rgba(0,0,0,.08);
+            .icon-fabusekuai {
+                font-size: 40px;
+            }
+        }
+
+    }
+    .title{
+        height: 100px;
+        margin: 0 30px;
+        .input{
+            height: 100%;
+            width: 100%;
+            font-size: 30px;
+        }
+    }
+    .edit-content{
+        margin: 0 30px;
+        .editor{
+            width: 100%;
+            height: 100%;
+            color: #1a1a1a;
+        }
+    }
+
+
+
+}

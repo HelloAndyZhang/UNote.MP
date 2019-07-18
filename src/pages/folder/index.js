@@ -4,14 +4,14 @@ import './index.scss'
 import SwipeAction from '@/components/swipe-action/index';
 import Modal from '@/components/modal/index';
 import Utils from '@/utils/index'
-
+import classNames from 'classnames';
 export default class Folder extends Component {
     static options = {
         addGlobalClass: true
     }
     config = {
         navigationBarTitleText: '文件夹',
-        disableScroll: true
+        enablePullDownRefresh:true,
     }
     constructor(props) {
         super(props)
@@ -19,7 +19,8 @@ export default class Folder extends Component {
             config: [],
             isOpened: false,
             noteIndexName: '',
-            noteIndex: null
+            noteIndex: null,
+            isPupShow:false
         }
         this.editorCtx = null; // 编辑器上下文
     }
@@ -33,6 +34,7 @@ export default class Folder extends Component {
 
     }
     componentWillMount() {
+        
         this.init()
     }
     //下拉刷新
@@ -155,9 +157,21 @@ export default class Folder extends Component {
             noteIndexName: event.target.value
         })
     }
+    handleTogglePup(){
+        const { isPupShow} =this.state;
+        this.setState({
+            isPupShow:!isPupShow
+        })
+        !isPupShow ? Taro.hideTabBar():setTimeout(()=>{Taro.showTabBar()},400) ;
+    }
+    goCreateNote(){
+        Taro.navigateTo({
+            url:'/pages/create-note/index'
+        })
+    }
     componentDidHide() { }
     render() {
-        let { config, isOpened } = this.state;
+        let { config,isPupShow } = this.state;
         return (
             <View className='page-folder'>
                 <View className='header'>
@@ -179,7 +193,6 @@ export default class Folder extends Component {
                                     <Text className='iconfont icon-wenjianjia1'></Text>
                                 </View>
                                 <View className='u-cell_value'>
-
                                     <View className='title'>{item.title}</View>
                                     <View className='time'>{item.time}</View>
                                 </View>
@@ -187,7 +200,25 @@ export default class Folder extends Component {
                         </SwipeAction>
                     ))
                 }
-                <View className='open_btn'>
+                <View className={classNames('float-pup',{'float-pup--active':isPupShow})} >
+                    <View className='float-pup__overlay' onClick={this.handleTogglePup.bind(this)}></View>
+                    <View className='float-pup__container'>
+                        <View className='type-list'>
+                            <View className='type_item'>
+                                <Text className='iconfont icon-wenjianjia1 icon'></Text>
+                                <Text className='text'>新建文件夹</Text>
+                            </View>
+                            <View className='type_item' onClick={this.goCreateNote.bind(this)}>
+                                <Text className='iconfont icon-wenjian-wenben icon'></Text>
+                                <Text className='text'>新建笔记</Text>
+                            </View>
+                        </View>
+                        <View className='close_box' onClick={this.handleTogglePup.bind(this)}>
+                            <Text className='iconfont icon-guanbi1'></Text>
+                        </View>
+                    </View>
+                </View>
+                <View className='open_btn' onClick={this.handleTogglePup.bind(this)}>
                     <Text className='iconfont icon-jiahao icon'></Text>
                 </View>
             </View>

@@ -63,6 +63,7 @@ page{
     display: flex;
     align-items: center;
     justify-content: center;
+    @include active();
     .icon{
         font-size:38px;
         color: #fff;
