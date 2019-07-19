@@ -4,12 +4,13 @@ page{
     height: 100%;
 }
 .page-folder{
+    background: #fff;
     .header{
         background: #F0F0F0;
         border-radius: 8px;
-        height: 68px;
+        height: 75px;
         width: 690px;
-        margin:  20px auto;
+        margin: 0 auto 20px;
         display: flex;
         align-items: center;
         .icon-sousuo{
@@ -155,5 +156,23 @@ page{
                 transform: translate3d(0, 0, 0);
             }
         }
+    }
+    .index_modal{
+        z-index: 2050;
+        .modal_content{
+            padding: 30px;
+            .input{
+                width: 100%;
+                height:80px;
+                box-sizing: border-box;
+                line-height: 1;
+                padding-left: 15px;
+                border: none;
+                font-size:24px;
+                background: hsla(201,7%,52%,.1);
+                color: #333333;
+            }
+        }
+    
     }
 }

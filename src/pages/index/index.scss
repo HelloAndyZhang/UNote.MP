@@ -8,6 +8,7 @@ page{
 }
 .u-cell-item{
     background: #fff;
+    @include active();
     .item{
         padding:22px 30px;
         border-bottom: 1px solid #f5f5f5;

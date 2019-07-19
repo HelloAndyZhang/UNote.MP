@@ -20,7 +20,10 @@ export default class Folder extends Component {
             isOpened: false,
             noteIndexName: '',
             noteIndex: null,
-            isPupShow:false
+            isPupShow:false,
+            keyWords:'',
+            modal_index:1, // 1重命名 2.新建文件夹
+            modal_name:'重命名',
         }
         this.editorCtx = null; // 编辑器上下文
     }
@@ -110,6 +113,8 @@ export default class Folder extends Component {
         if (item.index == 1) {
             this.setState({
                 isOpened: true,
+                modal_index:1,
+                modal_name:'重命名',
             })
         }
         if (item.index == 2) {
@@ -143,13 +148,18 @@ export default class Folder extends Component {
     }
     //重命名弹窗确定事件
     handleModalConfirm() {
-        let { config, noteIndexName, noteIndex } = this.state;
-        config[noteIndex].title = noteIndexName;
-        config[noteIndex].isOpened = false;
-        this.setState({
-            isOpened: false,
-            config,
-        })
+        let { config, noteIndexName, noteIndex ,modal_index} = this.state;
+        if(modal_index == 1){
+            config[noteIndex].title = noteIndexName;
+            config[noteIndex].isOpened = false;
+            this.setState({
+                isOpened: false,
+                config,
+            })
+        }
+        if(modal_index == 2){
+            this.getNewFolder()
+        }
     }
     //修改笔记名字
     handleNoteRename(event) {
@@ -165,19 +175,106 @@ export default class Folder extends Component {
         !isPupShow ? Taro.hideTabBar():setTimeout(()=>{Taro.showTabBar()},400) ;
     }
     goCreateNote(){
-        Taro.navigateTo({
-            url:'/pages/create-note/index'
+        this.handleTogglePup();
+        setTimeout(()=>{
+            Taro.navigateTo({
+                url:'/pages/create-note/index'
+            })
+        },100)
+    }
+    handleSearchKey(event){
+        this.setState({
+            keyWords:event.target.value
         })
+    }
+    handleClearKeyWords(){
+        this.setState({
+            keyWords:''
+        })
+    }
+    handleNewFolder(){
+        this.setState({
+            isOpened:true,
+            modal_index:2,
+            modal_name:'请输入文件夹名字',
+        })
+        this.handleTogglePup()
+    }
+    getNewFolder(){
+        let { config,noteIndexName } = this.state;
+        config.unshift({
+            options: [{
+                text: '重命名',
+                style: {
+                    backgroundColor: '#6190E8'
+                },
+                index: 1
+            }, {
+                text: '删除',
+                style: {
+                    backgroundColor: '#FF4949'
+                },
+                index: 2
+            }],
+            isOpened: false,
+            title:noteIndexName,
+            time: Utils.formatTime(new Date())
+        })
+        this.setState({
+            config,
+            isOpened:false,
+            noteIndexName:'',
+        })
+    }
+    getDateDiff(setdateTimeStamp) {
+        var minute = 1000 * 60;
+        var hour = minute * 60;
+        var day = hour * 24;
+        var halfamonth = day * 15;
+        var month = day * 30;
+        var dateTimeStamp = new Date(setdateTimeStamp);
+        var now = new Date().getTime();
+        var diffValue = now - dateTimeStamp;
+        if (diffValue < 0) {
+            //若日期不符则弹出窗口告之
+            return "结束日期不能小于开始日期！";
+        }
+        var monthC = diffValue / month;
+        var weekC = diffValue / (7 * day);
+        var dayC = diffValue / day;
+        var hourC = diffValue / hour;
+        var minC = diffValue / minute;
+        let result
+        if (monthC >= 1) {
+            result = "发表于" + parseInt(monthC) + "个月前";
+        }
+        else if (weekC >= 1) {
+            result = "发表于" + parseInt(weekC) + "周前";
+        }
+        else if (dayC >= 1) {
+            result = "发表于" + parseInt(dayC) + "天前";
+        }
+        else if (hourC >= 1) {
+            result = "发表于" + parseInt(hourC) + "个小时前";
+        }
+        else if (minC >= 1) {
+            result = "发表于" + parseInt(minC) + "分钟前";
+        } else
+            result = "刚刚发表";
+        return result;
     }
     componentDidHide() { }
     render() {
-        let { config,isPupShow } = this.state;
+        let { config,isPupShow,keyWords,isOpened ,modal_name,modal_index} = this.state;
         return (
             <View className='page-folder'>
                 <View className='header'>
                     <Text className='iconfont icon-sousuo'></Text>
-                    <Input className='input' value='' placeholder="搜索"></Input>
-                    <Text className='iconfont icon-guanbi'></Text>
+                    <Input className='input' value={keyWords} placeholder="搜索" onInput={this.handleSearchKey.bind(this)}></Input>
+                    {
+                        keyWords.length>0&&
+                        <Text className='iconfont icon-guanbi' onClick={this.handleClearKeyWords.bind(this)}></Text>
+                    }
                 </View>
                 {
                     config.map((item, index) => (
@@ -194,7 +291,7 @@ export default class Folder extends Component {
                                 </View>
                                 <View className='u-cell_value'>
                                     <View className='title'>{item.title}</View>
-                                    <View className='time'>{item.time}</View>
+                                    <View className='time'>{this.getDateDiff(item.time)}</View>
                                 </View>
                             </View>
                         </SwipeAction>
@@ -204,7 +301,7 @@ export default class Folder extends Component {
                     <View className='float-pup__overlay' onClick={this.handleTogglePup.bind(this)}></View>
                     <View className='float-pup__container'>
                         <View className='type-list'>
-                            <View className='type_item'>
+                            <View className='type_item' onClick={this.handleNewFolder.bind(this)}>
                                 <Text className='iconfont icon-wenjianjia1 icon'></Text>
                                 <Text className='text'>新建文件夹</Text>
                             </View>
@@ -218,6 +315,21 @@ export default class Folder extends Component {
                         </View>
                     </View>
                 </View>
+                <Modal
+                    isOpened={isOpened}
+                    title={modal_name}
+                    cancelText='取消'
+                    confirmText='确认'
+                    onClose={this.handleModalClose.bind(this)}
+                    onCancel={this.handleModalCancel.bind(this)}
+                    onConfirm={this.handleModalConfirm.bind(this)}
+
+                    className='index_modal'
+                >
+                    <View className='modal_content'>
+                        <Input className='input' value={noteIndexName} placeholder="请输入文件夹名字"  onInput={this.handleNoteRename.bind(this)} />
+                    </View>
+                </Modal>
                 <View className='open_btn' onClick={this.handleTogglePup.bind(this)}>
                     <Text className='iconfont icon-jiahao icon'></Text>
                 </View>
