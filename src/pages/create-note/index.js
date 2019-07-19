@@ -56,7 +56,8 @@ export default class Folder extends Component {
                 style: 'icon-zuoyouduiqi',
                 key: 'align',
                 value: 'justify'
-            }]
+            }],
+            title:''
         }
         this.editorCtx = null; // 编辑器上下文
     }
@@ -85,15 +86,29 @@ export default class Folder extends Component {
     async onEditorReady() {
         const res = await delayQuerySelectorCtx(this, '#editor');
         if (res) {
-            console.log(res)
-            console.log('1313')
             this.editorCtx = res.context
         }
     }
+    handleInputTitle(event){
+        this.setState({
+            title:event.target.value
+        })
+    }
     handleSaveArticle() {
+        let { title } = this.state;
         this.editorCtx.getContents({
             success(res) {
-                console.log(res)
+                if(res.errMsg == 'ok'){
+                    Utils.session('article',{
+                        title:title,
+                        nodes:res.html
+                    });
+                    setTimeout(()=>{
+                        Taro.navigateTo({
+                            url:'/pages/note-detail/index'
+                        })
+                    },300)
+                }
             }
         })
     }
@@ -125,7 +140,7 @@ export default class Folder extends Component {
                 </View>
                 <View className='edit-content'>
                     <View className='title'>
-                        <Input placeholder='请输入标题' className='input'></Input>
+                        <Input placeholder='请输入标题' className='input' onInput={this.handleInputTitle.bind(this)}></Input>
                     </View>
                     <Editor id="editor"
                         className="editor"

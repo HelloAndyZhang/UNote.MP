@@ -1,3 +1,4 @@
+import Taro from "@tarojs/taro";
 
 const formatNumber = (n) => {
     const str = n.toString()
@@ -24,6 +25,7 @@ const session = (key, val) => {
         if (val instanceof Object) {
             val = JSON.stringify(val);
         }
+        console.log(val)
         Taro.setStorageSync(key, val);
         return;
     }
