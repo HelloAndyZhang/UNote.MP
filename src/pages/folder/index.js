@@ -180,7 +180,7 @@ export default class Folder extends Component {
             Taro.navigateTo({
                 url:'/pages/create-note/index'
             })
-        },100)
+        },400)
     }
     handleSearchKey(event){
         this.setState({
@@ -327,7 +327,7 @@ export default class Folder extends Component {
                     className='index_modal'
                 >
                     <View className='modal_content'>
-                        <Input className='input' value={noteIndexName} placeholder="请输入文件夹名字"  onInput={this.handleNoteRename.bind(this)} />
+                        <Input className='input' value={noteIndexName} adjustPosition placeholder="请输入文件夹名字"  onInput={this.handleNoteRename.bind(this)} />
                     </View>
                 </Modal>
                 <View className='open_btn' onClick={this.handleTogglePup.bind(this)}>
