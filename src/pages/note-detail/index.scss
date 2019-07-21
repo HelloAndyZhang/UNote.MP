@@ -7,12 +7,12 @@
         height: 100px;
         line-height: 100px;
         font-size: 36px;
-        font-weight: 500;
         color: #333;
+        margin-bottom: 30px;
         @include hairline-bottom(#e5e5e5);
     }
     .editor{
-        padding-top: 30px;
+        
         width: 100%;
         min-height: 450px;
         color: #1a1a1a;
