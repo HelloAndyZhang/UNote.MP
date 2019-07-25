@@ -78,10 +78,12 @@ export default class Folder extends Component {
         this.editorCtx.format(item.key, item.value)
     }
     onStatusChange(event) {
+      if( Object.keys(event.detail).length>0){
         console.log(event)
-        this.setState({
-            editorFormat: event.detail
-        })
+          this.setState({
+              editorFormat: event.detail
+          })
+        }
     }
     async onEditorReady() {
         const res = await delayQuerySelectorCtx(this, '#editor');
@@ -121,7 +123,7 @@ export default class Folder extends Component {
 
     componentDidHide() { }
     render() {
-        let { formatlist } = this.state;
+        let { formatlist,editorFormat } = this.state;
         return (
             <View className='page-create'>
                 <View className='header'>
@@ -129,18 +131,15 @@ export default class Folder extends Component {
                         {
                             formatlist.map((item, index) => {
                                 return (
-                                    <Text className={classNames('iconfont tool-bar__item', item.style)} onClick={this.handleEditorFormat.bind(this, item)} key={index}></Text>
+                                    <Text className={classNames('iconfont tool-bar__item', item.style ,{ 'tool-bar__item': editorFormat[item.key] != '' ? true:false } )} onClick={this.handleEditorFormat.bind(this, item)} key={index}></Text>
                                 )
                             })
                         }
                     </ScrollView>
-                    <View className='save_btn' onClick={this.handleSaveArticle.bind(this)}>
-                        <Text className='iconfont  icon-fabusekuai'></Text>
-                    </View>
                 </View>
                 <View className='edit-content'>
                     <View className='title'>
-                        <Input placeholder='请输入标题' className='input' onInput={this.handleInputTitle.bind(this)}></Input>
+                        <Input placeholder='请输入标题' className='input' onInput={this.handleInputTitle.bind(this)}   placeholderClass='placeholderClass'></Input>
                     </View>
                     <Editor id="editor"
                         className="editor"
@@ -149,6 +148,9 @@ export default class Folder extends Component {
                         onReady={this.onEditorReady.bind(this)}>
                     </Editor>
                 </View>
+                <View className='plane_btn' onClick={this.handleSaveArticle.bind(this)}>
+                        <Text className='iconfont  icon-fabusekuai'></Text>
+                  </View>
             </View>
         )
     }

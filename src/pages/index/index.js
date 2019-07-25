@@ -35,10 +35,10 @@ export default class Index extends Component {
     }
     componentWillMount() {
         this.init();
-        this.handleLogin();
-        setTimeout(()=>{
-          this.getUserInfo();
-        },5000)
+        // this.handleLogin();
+        // setTimeout(()=>{
+        //   this.getUserInfo();
+        // },5000)
     }
     async handleLogin(){
       let res = await Taro.login();
@@ -223,7 +223,7 @@ export default class Index extends Component {
         let { config,isOpened } = this.state;
         return (
             <View className='index'>
-              <Button  open-type="getUserInfo" ongetuserinfo={this.bindGetUserInfo.bind(this)}>授权登录</Button>
+              {/* <Button  open-type="getUserInfo" ongetuserinfo={this.bindGetUserInfo.bind(this)}>授权登录</Button> */}
 
                 {
                     config.map((item, index) => (
