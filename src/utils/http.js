@@ -1,13 +1,13 @@
 import Taro from "@tarojs/taro";
 import Utils from './index'
 
-//请求URL地址    
+//请求URL地址
 
-let BASE_URL = "http://192.168.6.3:9277"; //  6.3 
-
-/**   
+// let BASE_URL = "http://192.168.6.3:9277"; //  6.3
+let BASE_URL = 'http://192.168.6.249:5000'
+/**
  * @method get请求
- * @param {Object} opt 
+ * @param {Object} opt
  */
 const GET = (opt = {}) => {
   let isLoad = opt.isLoad != undefined ? opt.isLoad : true;
@@ -36,7 +36,7 @@ const GET = (opt = {}) => {
           console.log(err)
         isLoad && Utils.hideLoading();
         reject(err)
-        isMsg && Utils.msg('网络异常','exception')
+        isMsg && Utils.msg('网络异常')
       }
     })
   })
@@ -44,10 +44,10 @@ const GET = (opt = {}) => {
 
 /**
  * @method POST请求
- * @param {Object} opt 
+ * @param {Object} opt
  */
 const POST = (opt = {}) => {
-    console.table(Object.assign(opt.data,{url:opt.url}))
+    // console.table(Object.assign(opt.data,{url:opt.url}))
   let isLoad = opt.isLoad != undefined ? opt.isLoad : true;
   let isMsg = opt.isMsg != undefined ? opt.isMsg : true;
   let editHeaders = {
@@ -58,10 +58,8 @@ const POST = (opt = {}) => {
   return new Promise((resolve, reject) => {
     Taro.request({
       url: `${BASE_URL}${opt.url}`,
-      data: JSON.stringify({
-        data : opt.data
-      }),
-      header: editHeaders,
+      data: opt.data,
+      header:editHeaders,
       method: "POST",
       success: (res) => {
         setTimeout(_ => {
@@ -78,7 +76,7 @@ const POST = (opt = {}) => {
       fail: err => {
         reject(err)
         isLoad && Utils.hideLoading();
-        isMsg && Utils.msg('网络异常','exception')
+        isMsg && Utils.msg('网络异常')
       }
     })
   })
@@ -109,7 +107,7 @@ const Fetch = (opt = {}) => {
       fail: err => {
         reject(err)
         isLoad && Utils.hideLoading();
-        Utils.msg('网络异常请重试')
+        Utils.msg('网络异常请重试','loading')
       }
     })
   })

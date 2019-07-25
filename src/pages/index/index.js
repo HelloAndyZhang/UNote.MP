@@ -1,10 +1,10 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Input, } from '@tarojs/components'
+import { View, Input, Button, } from '@tarojs/components'
 import SwipeAction from '@/components/swipe-action/index';
 import Modal from '@/components/modal/index';
 import Utils from '@/utils/index'
 import './index.scss'
-
+import http from '@/utils/http';
 export default class Index extends Component {
     static options = {
         addGlobalClass: true
@@ -12,14 +12,15 @@ export default class Index extends Component {
     config = {
         navigationBarTitleText: '我的优笔记',
         enablePullDownRefresh:true,
-    }       
+    }
     constructor(props) {
         super(props)
         this.state = {
             config: [],
             isOpened:false,
             noteIndexName:'',
-            noteIndex:null
+            noteIndex:null,
+            token:''
         }
         this.editorCtx = null; // 编辑器上下文
     }
@@ -32,8 +33,62 @@ export default class Index extends Component {
     componentWillPreload() {
 
     }
-    componentWillMount() { 
-        this.init()
+    componentWillMount() {
+        this.init();
+        this.handleLogin();
+        setTimeout(()=>{
+          this.getUserInfo();
+        },5000)
+    }
+    async handleLogin(){
+      let res = await Taro.login();
+      if( res.errMsg == "login:ok"){
+        let config={
+            url: '/api/token',
+            data:{
+              code:res.code
+            },
+            isLoad:true
+         }
+         let $res= await http.POST(config);
+         Utils.session('token',$res.token)
+         this.setState({
+           token:$res.token
+         })
+      }
+    }
+    async getUpdataUserInfo(data){
+      let { token } = this.state;
+      let config={
+        url: '/api/user/syncUserInfo',
+        data,
+        isLoad:true,
+        headers:{
+          Authorization:token,
+        }
+     }
+     let $res= await http.POST(config);
+     if($res){
+       console.log($res)
+     }
+    }
+    async getUserInfo(){
+      let { token } = this.state;
+      let config={
+        url: '/api/user/getUserInfo',
+        data:{},
+        headers:{
+          Authorization:token,
+        },
+        isLoad:true
+     }
+     let $res= await http.GET(config);
+     console.log($res)
+
+    }
+    bindGetUserInfo(e){
+      console.log(e.detail)
+      this.getUpdataUserInfo(e.detail.userInfo)
     }
     //下拉刷新
     onPullDownRefresh(){
@@ -94,11 +149,11 @@ export default class Index extends Component {
         const config = this.state.config.map((item, key) => {
             item.isOpened = key === index
             return item
-        }) 
+        })
         this.setState({
             config,
             noteIndexName:config[index].title,
-            noteIndex: index, 
+            noteIndex: index,
         })
     }
     //点击单元格时触发
@@ -117,7 +172,7 @@ export default class Index extends Component {
                 content:'删除不可恢复！',
                 success:(res)=>{
                     if(res.confirm){
-                        config.splice(noteIndex,1); 
+                        config.splice(noteIndex,1);
                     }else{
                         config[noteIndex].isOpened = false;
                     }
@@ -154,18 +209,21 @@ export default class Index extends Component {
     handleNoteRename(event){
         this.setState({
             noteIndexName:event.target.value
-        })    
+        })
     }
+    //去创建文章
     goCreateNote(){
         Taro.navigateTo({
             url:'/pages/create-note/index'
         })
     }
+
     componentDidHide() { }
     render() {
         let { config,isOpened } = this.state;
         return (
             <View className='index'>
+              <Button  open-type="getUserInfo" ongetuserinfo={this.bindGetUserInfo.bind(this)}>授权登录</Button>
 
                 {
                     config.map((item, index) => (

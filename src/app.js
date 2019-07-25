@@ -8,16 +8,17 @@ import './styles/index.scss'
 // if (process.env.NODE_ENV !== 'production' && process.env.TARO_ENV === 'h5')  {
 //   require('nerv-devtools')
 // }
-   
+
 class App extends Component {
 
-  config = {   
+  config = {
     pages: [
       'pages/index/index',
       'pages/folder/index',
       'pages/ucenter/index',
       'pages/create-note/index',
-      'pages/note-detail/index'
+      'pages/note-detail/index',
+      'pages/auth/index'
     ],
     window: {
       backgroundTextStyle: 'dark',

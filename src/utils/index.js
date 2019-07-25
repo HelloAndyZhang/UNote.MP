@@ -6,7 +6,7 @@ const formatNumber = (n) => {
 }
 /**
  * 过滤手机号
- * @param {Number} tel 
+ * @param {Number} tel
  */
 const filterPhone = (tel) => {
     var phone = String(tel).replace(/[^\d.]+/g, '').replace(/^\+?86/g, '').substring(0, 11);
@@ -14,8 +14,8 @@ const filterPhone = (tel) => {
 }
 /**
  * @method session存、读取
- * @param {String} key 
- * @param {any} val 
+ * @param {String} key
+ * @param {any} val
  */
 const session = (key, val) => {
     if (!key || typeof key != 'string') {
@@ -37,7 +37,7 @@ const session = (key, val) => {
 }
 /**
  * @method 删除session
- * @param {String} key 
+ * @param {String} key
  */
 const removeSession = (key) => {
     if (key == undefined) {
@@ -59,18 +59,19 @@ const checkPhone = (m) => {
 }
 /**
  * @method toast提示
- * @param {String} text 
+ * @param {String} text
  */
-const msg = (text, icon = 'none') => {
+const msg = (title, icon = 'none') => {
+  console.log(icon)
     Taro.showToast({
-        title: text,
-        icon: icon
+        title,
+        icon
     })
 }
 /**
  * @method 显示加载框
  * @param {Boolean} mask 是否显示蒙层
- * @param {String} title 提示文字 
+ * @param {String} title 提示文字
  */
 const showLoading = (title = "加载中...", mask = true) => {
     Taro.showLoading({
@@ -87,7 +88,7 @@ const hideLoading = () => {
 }
 /**
  * @method 设置剪贴板内容
- * @param {String} data 
+ * @param {String} data
  */
 const copy = (data) => {
     return new Promise((resolve, reject) => {
@@ -104,7 +105,7 @@ const copy = (data) => {
 }
 /**
  * @method 拨打电话
- * @param {Number} tel 
+ * @param {Number} tel
  */
 const Call = (tel) => {
     return new Promise((resovle, reject) => {
@@ -121,7 +122,7 @@ const Call = (tel) => {
 }
 /**
  * @method 下载图片
- * @param {String} url 
+ * @param {String} url
  */
 const downLoadImg = (url) => {
     return new Promise((resolve, reject) => {
@@ -166,13 +167,13 @@ const formatTime = (date) => {
 //格式化时间  date时间对象  fmt时间格式 如yyyy/MM/dd hh:mm:ss
 const FmtTime = (date, fmt) => {
     var o = {
-        "M+": date.getMonth() + 1, //月份   
-        "d+": date.getDate(), //日   
-        "h+": date.getHours(), //小时   
-        "m+": date.getMinutes(), //分   
-        "s+": date.getSeconds(), //秒   
-        "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
-        "S": date.getMilliseconds() //毫秒   
+        "M+": date.getMonth() + 1, //月份
+        "d+": date.getDate(), //日
+        "h+": date.getHours(), //小时
+        "m+": date.getMinutes(), //分
+        "s+": date.getSeconds(), //秒
+        "q+": Math.floor((date.getMonth() + 3) / 3), //季度
+        "S": date.getMilliseconds() //毫秒
     };
     if (/(y+)/.test(fmt))
         fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
