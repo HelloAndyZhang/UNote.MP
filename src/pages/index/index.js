@@ -34,57 +34,14 @@ export default class Index extends Component {
 
     }
     componentWillMount() {
+        this.setState({
+          token:Utils.session('token')
+        })
         this.init();
-        this.getAuthOpenId();
-        // setTimeout(()=>{
-        //   this.getUserInfo();
-        // },5000)
-        setTimeout(()=>{
-          this.getCreateNote()
-        },6000)
+        this.getNoteList()
     }
-    async getAuthOpenId(){
-      let res = await Taro.login();
-      if( res.errMsg == "login:ok"){
-        let config={
-            url: '/api/token',
-            data:{
-              code:res.code
-            },
-            isLoad:true
-         }
-         let $res= await http.POST(config);
-         console.log($res)
-         Utils.session('openid',$res.openId)
-         this.setState({
-            openid:$res.openId
-         },()=>{
-           this.handleUserLogin()
-         })
-      }
-    }
-    async handleUserLogin(){
-      let { openid} = this.state;
-      let config={
-        url: '/api/user/login',
-        data:{
-          openid,
-          mobile:13262057521,
-          password:'123456',
-          secret:"1|1564064281342"
-        },
-        isLoad:true
-     }
-     let $res= await http.POST(config);
-     console.log($res)
-     this.setState({
-       token:$res.data
-     },()=>{
-       this.getNotesList()
-     })
 
-
-    }
+    //获取笔记列表
     async getNoteList(){
       let {token } = this.state;
       let config={
@@ -94,17 +51,18 @@ export default class Index extends Component {
           limit:10
         },
         headers:{
-          token
+          Authorization:token
         },
         isLoad:true
      }
      let $res= await http.GET(config);
      console.log($res)
     }
+    //获取文件夹列表
     async getNotesList(){
       let {token } = this.state;
       let config={
-        url: '/api/note/list',
+        url:'/api/note/list',
         params:{
           page:1,
           limit:10
@@ -115,8 +73,6 @@ export default class Index extends Component {
         isLoad:true
      }
      let $res= await http.GET(config);
-
-
     }
     async getUpdataUserInfo(data){
       let { token } = this.state;
@@ -168,10 +124,6 @@ export default class Index extends Component {
 
      }
 
-    }
-    bindGetUserInfo(e){
-      console.log(e.detail)
-      this.getUpdataUserInfo(e.detail.userInfo)
     }
     //下拉刷新
     onPullDownRefresh(){
@@ -306,7 +258,6 @@ export default class Index extends Component {
         let { config,isOpened } = this.state;
         return (
             <View className='index'>
-              {/* <Button  open-type="getUserInfo" ongetuserinfo={this.bindGetUserInfo.bind(this)}>授权登录</Button> */}
 
                 {
                     config.map((item, index) => (

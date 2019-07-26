@@ -13,13 +13,14 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/login/index',
       'pages/index/index',
       'pages/folder/index',
       'pages/ucenter/index',
       'pages/create-note/index',
       'pages/note-detail/index',
-      'pages/auth/index',
-      'pages/login/index'
+      'pages/auth/index'
+
     ],
     window: {
       backgroundTextStyle: 'dark',
