@@ -18,7 +18,8 @@ class App extends Component {
       'pages/ucenter/index',
       'pages/create-note/index',
       'pages/note-detail/index',
-      'pages/auth/index'
+      'pages/auth/index',
+      'pages/login/index'
     ],
     window: {
       backgroundTextStyle: 'dark',

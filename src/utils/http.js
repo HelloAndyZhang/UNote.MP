@@ -4,7 +4,8 @@ import Utils from './index'
 //请求URL地址
 
 // let BASE_URL = "http://192.168.6.3:9277"; //  6.3
-let BASE_URL = 'http://192.168.6.249:5000'
+// let BASE_URL = 'http://192.168.6.249:5000'
+let BASE_URL = 'http://192.168.6.143:5000'
 /**
  * @method get请求
  * @param {Object} opt
@@ -62,6 +63,7 @@ const POST = (opt = {}) => {
       header:editHeaders,
       method: "POST",
       success: (res) => {
+
         setTimeout(_ => {
           if (res.data.State == -123456) {
             Utils.msg('状态获取失败')
@@ -74,6 +76,7 @@ const POST = (opt = {}) => {
         isLoad && Utils.hideLoading();
       },
       fail: err => {
+        console.log('13131313')
         reject(err)
         isLoad && Utils.hideLoading();
         isMsg && Utils.msg('网络异常')

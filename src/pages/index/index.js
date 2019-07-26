@@ -35,12 +35,15 @@ export default class Index extends Component {
     }
     componentWillMount() {
         this.init();
-        // this.handleLogin();
+        this.getAuthOpenId();
         // setTimeout(()=>{
         //   this.getUserInfo();
         // },5000)
+        setTimeout(()=>{
+          this.getCreateNote()
+        },6000)
     }
-    async handleLogin(){
+    async getAuthOpenId(){
       let res = await Taro.login();
       if( res.errMsg == "login:ok"){
         let config={
@@ -51,11 +54,69 @@ export default class Index extends Component {
             isLoad:true
          }
          let $res= await http.POST(config);
-         Utils.session('token',$res.token)
+         console.log($res)
+         Utils.session('openid',$res.openId)
          this.setState({
-           token:$res.token
+            openid:$res.openId
+         },()=>{
+           this.handleUserLogin()
          })
       }
+    }
+    async handleUserLogin(){
+      let { openid} = this.state;
+      let config={
+        url: '/api/user/login',
+        data:{
+          openid,
+          mobile:13262057521,
+          password:'123456',
+          secret:"1|1564064281342"
+        },
+        isLoad:true
+     }
+     let $res= await http.POST(config);
+     console.log($res)
+     this.setState({
+       token:$res.data
+     },()=>{
+       this.getNotesList()
+     })
+
+
+    }
+    async getNoteList(){
+      let {token } = this.state;
+      let config={
+        url: '/api/note/note-list',
+        data:{
+          page:1,
+          limit:10
+        },
+        headers:{
+          token
+        },
+        isLoad:true
+     }
+     let $res= await http.GET(config);
+     console.log($res)
+    }
+    async getNotesList(){
+      let {token } = this.state;
+      let config={
+        url: '/api/note/list',
+        params:{
+          page:1,
+          limit:10
+        },
+        headers:{
+          token
+        },
+        isLoad:true
+     }
+     let $res= await http.GET(config);
+
+
     }
     async getUpdataUserInfo(data){
       let { token } = this.state;
@@ -84,6 +145,28 @@ export default class Index extends Component {
      }
      let $res= await http.GET(config);
      console.log($res)
+
+    }
+    async getCreateNote(){
+      let { token } = this.state;
+      let config={
+        url: '/api/note/create',
+        data:{
+          title:'Anydzhang',
+          content:'HI',
+          isDir:0, //是否是目录
+          dirId:20, //目录ID
+        },
+        isLoad:true,
+        headers:{
+          Authorization:token,
+        }
+     }
+     let $res= await http.POST(config);
+     if($res){
+       console.log($res)
+
+     }
 
     }
     bindGetUserInfo(e){
