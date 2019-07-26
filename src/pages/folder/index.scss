@@ -36,7 +36,11 @@ page{
             .icon-wenjianjia1{
                 font-size: 40px;
                 color: #00BEFF;
-            }
+			}
+			.icon-fuwuqiliebiao{
+				font-size: 42px;
+				color:rgb(1, 136, 251)
+			}
         }
         .u-cell_value{
             flex: 1;
@@ -173,6 +177,6 @@ page{
                 color: #333333;
             }
         }
-    
+
     }
 }

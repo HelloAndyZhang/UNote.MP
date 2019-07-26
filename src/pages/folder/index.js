@@ -5,6 +5,7 @@ import SwipeAction from '@/components/swipe-action/index';
 import Modal from '@/components/modal/index';
 import Utils from '@/utils/index'
 import classNames from 'classnames';
+import http from '@/utils/http';
 export default class Folder extends Component {
     static options = {
         addGlobalClass: true
@@ -35,66 +36,72 @@ export default class Folder extends Component {
     }
     componentWillPreload() {
 
-    }
+	}
+	componentDidShow() {
+		this.getNoteList()
+	}
     componentWillMount() {
-        
-        this.init()
+        this.setState({
+			token:Utils.session('token')
+		})
     }
     //下拉刷新
     onPullDownRefresh() {
-        this.init()
-        setTimeout(() => {
-            Taro.stopPullDownRefresh();
-        }, 600)
-    }
+		this.getNoteList()
+	}
+	//获取文件夹列表
+	async getNoteList(){
+		let {token } = this.state;
+		let config={
+			url: '/api/note/list',
+			headers:{
+				Authorization:token
+			},
+			isLoad:true
+		}
+		let $res= await http.GET(config);
+		if( $res.code == 200){
+			let list = $res.data.rows;
+			let config =[]
+			list.map((item,index)=>{
+				config.push({
+					options: [{
+						text: '重命名',
+						style: {
+							backgroundColor: '#6190E8'
+						},
+						index:1
+					}, {
+						text: '删除',
+						style: {
+							backgroundColor: '#FF4949'
+						},
+						index:2
+					}],
+					isOpened: false,
+					title:item.title,
+					time: Utils.formatTime(item.created_at),
+					id:item.id,
+					isDir:item.isDir,
+					dirId:item.dirId
+				})
+			})
+			this.setState({
+				config
+			})
+		}else{
+			Utils.msg($res.msg)
+		}
+		setTimeout(()=>{
+			Taro.stopPullDownRefresh();
+		},300)
+	}
     componentDidMount() { }
 
     componentWillUnmount() { }
 
-    componentDidShow() { }
-    //初始化生成数据
-    init() {
-        const num = Math.floor(Math.random() * (25 - 10) + 10);
-        let config = []
-        for (let i = 0; i < num; i++) {
-            config.push({
-                options: [{
-                    text: '重命名',
-                    style: {
-                        backgroundColor: '#6190E8'
-                    },
-                    index: 1
-                }, {
-                    text: '删除',
-                    style: {
-                        backgroundColor: '#FF4949'
-                    },
-                    index: 2
-                }],
-                isOpened: false,
-                title: '2019年开发排期表',
-                time: Utils.formatTime(this.getRandomDateBetween())
-            })
-        }
-        this.setState({
-            config
-        })
-    }
-    //随机生成时间
-    getRandomDateBetween() { // 生成当前时间一个月内的随机时间。
-        var date = new Date();
-        var e = date.getTime();//当前时间的秒数
-        var f = date.getTime() - (30 * 24 * 60 * 60 * 1000); //30天之前的秒数，
-        return new Date(this.RandomNumBoth(f, e));
-    }
-    RandomNumBoth(Min, Max) {
-        var Range = Max - Min;
-        var Rand = Math.random();
-        var num = Min + Math.round(Rand * Range); //四舍五入
-        return num;
-    }
     //滑动单元格时触发
-    handleSingle(index) {
+    handleSingle(index,item) {
         const config = this.state.config.map((item, key) => {
             item.isOpened = key === index
             return item
@@ -147,8 +154,8 @@ export default class Folder extends Component {
         })
     }
     //重命名弹窗确定事件
-    handleModalConfirm() {
-        let { config, noteIndexName, noteIndex ,modal_index} = this.state;
+    async handleModalConfirm() {
+        let { config, noteIndexName, noteIndex ,modal_index,token} = this.state;
         if(modal_index == 1){
             config[noteIndex].title = noteIndexName;
             config[noteIndex].isOpened = false;
@@ -158,7 +165,27 @@ export default class Folder extends Component {
             })
         }
         if(modal_index == 2){
-            this.getNewFolder()
+			let config={
+				url:'/api/note/create',
+				data:{
+					title:noteIndexName,
+					isDir:1,
+				},
+				isLoad:true,
+				headers:{
+					Authorization:token
+				},
+			}
+			let $res= await http.POST(config);
+			if($res.code == 200){
+				Utils.msg('创建成功!');
+				this.setState({
+					isOpened:false,
+					noteIndexName:'',
+				},()=>{
+					this.getNoteList()
+				})
+			}
         }
     }
     //修改笔记名字
@@ -199,32 +226,6 @@ export default class Folder extends Component {
             modal_name:'请输入文件夹名字',
         })
         this.handleTogglePup()
-    }
-    getNewFolder(){
-        let { config,noteIndexName } = this.state;
-        config.unshift({
-            options: [{
-                text: '重命名',
-                style: {
-                    backgroundColor: '#6190E8'
-                },
-                index: 1
-            }, {
-                text: '删除',
-                style: {
-                    backgroundColor: '#FF4949'
-                },
-                index: 2
-            }],
-            isOpened: false,
-            title:noteIndexName,
-            time: Utils.formatTime(new Date())
-        })
-        this.setState({
-            config,
-            isOpened:false,
-            noteIndexName:'',
-        })
     }
     getDateDiff(setdateTimeStamp) {
         var minute = 1000 * 60;
@@ -287,7 +288,12 @@ export default class Folder extends Component {
                         >
                             <View className='u-cell-item'>
                                 <View className='u-cell_title'>
-                                    <Text className='iconfont icon-wenjianjia1'></Text>
+                                    {
+										item.isDir == 1 ?
+										<Text className='iconfont icon-wenjianjia1'></Text>
+										:
+										<Text className='iconfont icon-fuwuqiliebiao'></Text>
+									}
                                 </View>
                                 <View className='u-cell_value'>
                                     <View className='title'>{item.title}</View>
