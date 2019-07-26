@@ -2,8 +2,8 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Input, Button, } from '@tarojs/components'
 import SwipeAction from '@/components/swipe-action/index';
 import Modal from '@/components/modal/index';
-import Utils from '@/utils/index'
 import './index.scss'
+import Utils from '@/utils/index'
 import http from '@/utils/http';
 export default class Index extends Component {
     static options = {
@@ -37,8 +37,6 @@ export default class Index extends Component {
         this.setState({
           token:Utils.session('token')
         })
-        this.init();
-
     }
     componentDidShow(){
       this.getNoteList()
@@ -48,10 +46,6 @@ export default class Index extends Component {
 		let {token } = this.state;
 		let config={
 			url: '/api/note/note-list',
-			data:{
-				page:1,
-				limit:10
-			},
 			headers:{
 				Authorization:token
 			},
@@ -62,28 +56,31 @@ export default class Index extends Component {
 			let list = $res.data.rows;
 			let config =[]
 			list.map((item,index)=>{
-					config.push({
-						options: [{
-							text: '重命名',
-							style: {
-								backgroundColor: '#6190E8'
-							},
-							index:1
-						}, {
-							text: '删除',
-							style: {
-								backgroundColor: '#FF4949'
-							},
-							index:2
-						}],
-						isOpened: false,
-						title:item.title,
-						time: Utils.formatTime(item.created_at)
-					})
+				config.push({
+					options: [{
+						text: '重命名',
+						style: {
+							backgroundColor: '#6190E8'
+						},
+						index:1
+					}, {
+						text: '删除',
+						style: {
+							backgroundColor: '#FF4949'
+						},
+						index:2
+					}],
+					isOpened: false,
+					title:item.title,
+					time: Utils.formatTime(item.created_at),
+					id:item.id
+				})
 			})
 			this.setState({
 				config
 			})
+		}else{
+			Utils.msg($res.msg)
 		}
 		setTimeout(()=>{
             Taro.stopPullDownRefresh();
@@ -236,7 +233,12 @@ export default class Index extends Component {
             url:'/pages/create-note/index'
         })
     }
-
+	goNoteDetail(item){
+		console.log(item)
+		Taro.navigateTo({
+			url:`/pages/note-detail/index?id=${item.id}`
+		})
+	}
     componentDidHide() { }
     render() {
         let { config,isOpened } = this.state;
@@ -251,7 +253,7 @@ export default class Index extends Component {
                             options={item.options}
                             onClick={this.handleClick}
                             className='u-cell-item'>
-                            <View className='item'>
+                            <View className='item' onClick={this.goNoteDetail.bind(this,item)}>
                                 <View className='title'>{item.title}</View>
                                 <View className='time'>{item.time}</View>
                             </View>

@@ -1,8 +1,9 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, RichText } from '@tarojs/components'
 import './index.scss'
-import Utils from '@/utils/index'
 import classNames from 'classnames';
+import Utils from '@/utils/index'
+import http from '@/utils/http';
 export default class Note extends Component {
     static options = {
         addGlobalClass: true
@@ -15,7 +16,9 @@ export default class Note extends Component {
         super(props)
         this.state = {
             nodes:[],
-            title:'hi'
+			title:'hi',
+			token:'',
+			id:''
         }
     }
     //分享
@@ -38,13 +41,36 @@ export default class Note extends Component {
 
     componentWillUnmount() { }
 
-    componentDidShow() { 
-        const article = Utils.session('article');
-        this.setState({
-            nodes:article.nodes,
-            title:article.title
-        })
-    }
+    componentDidShow() {
+		let token = Utils.session('token');
+		let { id} = this.$router.params
+		this.setState({
+			token,
+			id
+		},()=>{
+			this.getNoteDetail()
+		})
+	}
+	//
+	async getNoteDetail(){
+		let {token,id } = this.state;
+		let config={
+			url: '/api/note/getInfo',
+			params:{
+				id,
+			},
+			headers:{
+				Authorization:token
+			},
+			isLoad:true
+		}
+		let $res= await http.GET(config);
+		if( $res.code == 200){
+
+		}else{
+			Utils.msg($res.msg)
+		}
+	}
 
     componentDidHide() { }
     render() {

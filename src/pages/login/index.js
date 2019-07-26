@@ -32,7 +32,7 @@ export default class Index extends Component {
   componentWillUnmount() { }
 
   componentDidShow() {
-    Utils.session('token')&&Taro.switchTab({url:'/pages/index/index'})
+    // Utils.session('token')&&Taro.switchTab({url:'/pages/index/index'})
   }
   componentDidHide() { }
   async getAuthOpenId(){
