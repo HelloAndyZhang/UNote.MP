@@ -151,7 +151,9 @@ const downLoadImg = (url) => {
     });
 }
 
-const formatTime = (date) => {
+const formatTime = (time) => {
+  console.log(time)
+    let date = new Date(time)
     const year = date.getFullYear()
     const month = date.getMonth() + 1
     const day = date.getDate()

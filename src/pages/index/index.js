@@ -38,25 +38,56 @@ export default class Index extends Component {
           token:Utils.session('token')
         })
         this.init();
-        this.getNoteList()
-    }
 
+    }
+    componentDidShow(){
+      this.getNoteList()
+    }
     //获取笔记列表
     async getNoteList(){
-      let {token } = this.state;
-      let config={
-        url: '/api/note/note-list',
-        data:{
-          page:1,
-          limit:10
-        },
-        headers:{
-          Authorization:token
-        },
-        isLoad:true
-     }
-     let $res= await http.GET(config);
-     console.log($res)
+		let {token } = this.state;
+		let config={
+			url: '/api/note/note-list',
+			data:{
+				page:1,
+				limit:10
+			},
+			headers:{
+				Authorization:token
+			},
+			isLoad:true
+		}
+		let $res= await http.GET(config);
+		if( $res.code == 200){
+			let list = $res.data.rows;
+			let config =[]
+			list.map((item,index)=>{
+					config.push({
+						options: [{
+							text: '重命名',
+							style: {
+								backgroundColor: '#6190E8'
+							},
+							index:1
+						}, {
+							text: '删除',
+							style: {
+								backgroundColor: '#FF4949'
+							},
+							index:2
+						}],
+						isOpened: false,
+						title:item.title,
+						time: Utils.formatTime(item.created_at)
+					})
+			})
+			this.setState({
+				config
+			})
+		}
+		setTimeout(()=>{
+            Taro.stopPullDownRefresh();
+        },300)
     }
     //获取文件夹列表
     async getNotesList(){
@@ -127,58 +158,11 @@ export default class Index extends Component {
     }
     //下拉刷新
     onPullDownRefresh(){
-        this.init()
-        setTimeout(()=>{
-            Taro.stopPullDownRefresh();
-        },600)
+        this.getNoteList();
     }
     componentDidMount() { }
 
     componentWillUnmount() { }
-
-    componentDidShow() { }
-    //初始化生成数据
-    init(){
-        const num = Math.floor(Math.random()*(25-10)+10);
-        let config =[]
-        for(let i=0;i<num; i++){
-            config.push({
-                options: [{
-                    text: '重命名',
-                    style: {
-                        backgroundColor: '#6190E8'
-                    },
-                    index:1
-                }, {
-                    text: '删除',
-                    style: {
-                        backgroundColor: '#FF4949'
-                    },
-                    index:2
-                }],
-                isOpened: false,
-                title: '2019年开发排期表',
-                time: Utils.formatTime(this.getRandomDateBetween())
-            })
-        }
-        console.log(config)
-        this.setState({
-            config
-        })
-    }
-    //随机生成时间
-    getRandomDateBetween() { // 生成当前时间一个月内的随机时间。
-        var date = new Date();
-        var e = date.getTime();//当前时间的秒数
-        var f = date.getTime()-(30*24*60*60*1000); //30天之前的秒数，
-        return new Date(this.RandomNumBoth(f,e));
-    }
-    RandomNumBoth(Min,Max){
-        var Range = Max - Min;
-        var Rand = Math.random();
-        var num = Min + Math.round(Rand * Range); //四舍五入
-        return num;
-    }
     //滑动单元格时触发
     handleSingle(index) {
         const config = this.state.config.map((item, key) => {
@@ -258,7 +242,6 @@ export default class Index extends Component {
         let { config,isOpened } = this.state;
         return (
             <View className='index'>
-
                 {
                     config.map((item, index) => (
                         <SwipeAction

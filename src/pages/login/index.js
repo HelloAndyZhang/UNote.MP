@@ -31,7 +31,9 @@ export default class Index extends Component {
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() {
+    Utils.session('token')&&Taro.switchTab({url:'/pages/index/index'})
+  }
   componentDidHide() { }
   async getAuthOpenId(){
     let res = await Taro.login();
