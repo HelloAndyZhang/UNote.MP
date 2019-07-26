@@ -152,7 +152,6 @@ const downLoadImg = (url) => {
 }
 
 const formatTime = (time) => {
-  console.log(time)
     let date = new Date(time)
     const year = date.getFullYear()
     const month = date.getMonth() + 1

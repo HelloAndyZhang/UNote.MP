@@ -51,12 +51,12 @@ export default class Note extends Component {
 			this.getNoteDetail()
 		})
 	}
-	//
+	//获取订单详情
 	async getNoteDetail(){
 		let {token,id } = this.state;
 		let config={
 			url: '/api/note/getInfo',
-			params:{
+			data:{
 				id,
 			},
 			headers:{
@@ -64,9 +64,12 @@ export default class Note extends Component {
 			},
 			isLoad:true
 		}
-		let $res= await http.GET(config);
+		let $res= await http.POST(config);
 		if( $res.code == 200){
-
+			this.setState({
+				title:$res.data.title,
+				nodes:$res.data.content
+			})
 		}else{
 			Utils.msg($res.msg)
 		}

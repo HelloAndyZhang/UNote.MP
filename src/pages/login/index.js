@@ -67,47 +67,47 @@ export default class Index extends Component {
     })
   }
   async handleUserLogin(){
-      let { openid,mobile,password } = this.state;
-      if( !openid){
-        Utils.msg('未获取到您的openId袄');
-        return
-      }
-      if(!mobile ){
-        Utils.msg('您还没有输入手机号袄');
-        return
-      }
-      if(!password ){
-        Utils.msg('您还没有输入密码袄');
-        return
-      }
-      if(!Utils.checkPhone(mobile)){
-        Utils.msg('手机号不正确袄');
-        return
-      }
-      let time = Math.ceil(new Date().getTime())
-      let config={
-        url:'/api/user/login',
-        data:{
-          openid,
-          mobile,
-          password,
-          secret:`1|${time}`
-        },
-        isLoad:true
-    }
-    let $res= await http.POST(config);
-    if($res.code == 200){
-      Utils.session('token',$res.data)
-      this.setState({
-        token:$res.data
-      })
-      Utils.msg('登录成功');
-      setTimeout(()=>{
-        Taro.switchTab({
-          url:'/pages/index/index'
-        })
-      },600)
-    }
+		let { openid,mobile,password } = this.state;
+		if( !openid){
+			Utils.msg('未获取到您的openId袄');
+			return
+		}
+		if(!mobile ){
+			Utils.msg('您还没有输入手机号袄');
+			return
+		}
+		if(!password ){
+			Utils.msg('您还没有输入密码袄');
+			return
+		}
+		if(!Utils.checkPhone(mobile)){
+			Utils.msg('手机号不正确袄');
+			return
+		}
+		let time = Math.ceil(new Date().getTime())
+		let config={
+			url:'/api/user/login',
+			data:{
+			openid,
+			mobile,
+			password,
+			secret:`1|${time}`
+			},
+			isLoad:true
+		}
+	    let $res= await http.POST(config);
+		if($res.code == 200){
+			Utils.session('token',$res.data)
+			this.setState({
+				token:$res.data
+			})
+			Utils.msg('登录成功');
+			setTimeout(()=>{
+				Taro.switchTab({
+				url:'/pages/index/index'
+				})
+			},600)
+		}
   }
   render() {
     let {mobile,password } = this.state;

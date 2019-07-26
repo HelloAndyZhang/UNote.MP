@@ -20,7 +20,8 @@ export default class Index extends Component {
             isOpened:false,
             noteIndexName:'',
             noteIndex:null,
-            token:''
+			token:'',
+			noteId:null,
         }
         this.editorCtx = null; // 编辑器上下文
     }
@@ -132,25 +133,25 @@ export default class Index extends Component {
 
     }
     async getCreateNote(){
-      let { token } = this.state;
-      let config={
-        url: '/api/note/create',
-        data:{
-          title:'Anydzhang',
-          content:'HI',
-          isDir:0, //是否是目录
-          dirId:20, //目录ID
-        },
-        isLoad:true,
-        headers:{
-          Authorization:token,
-        }
-     }
-     let $res= await http.POST(config);
-     if($res){
-       console.log($res)
+		let { token } = this.state;
+		let config={
+			url: '/api/note/create',
+			data:{
+				title:'Anydzhang',
+				content:'HI',
+				isDir:0, //是否是目录
+				dirId:20, //目录ID
+			},
+			isLoad:true,
+			headers:{
+				Authorization:token,
+			}
+		}
+		let $res= await http.POST(config);
+		if($res){
+			console.log($res)
 
-     }
+		}
 
     }
     //下拉刷新
@@ -161,21 +162,22 @@ export default class Index extends Component {
 
     componentWillUnmount() { }
     //滑动单元格时触发
-    handleSingle(index) {
+    handleSingle(index,item) {
         const config = this.state.config.map((item, key) => {
             item.isOpened = key === index
             return item
-        })
+		})
         this.setState({
             config,
             noteIndexName:config[index].title,
-            noteIndex: index,
+			noteIndex:index,
+			noteId:item.id
         })
-    }
+	}
     //点击单元格时触发
     handleClick = (item, key, e) => {
         console.log('触发了点击', item, key, e)
-        let {noteIndex,config } = this.state;
+        let {noteIndex,config,noteId,token ,noteId } = this.state;
         //重命名
         if(item.index == 1){
             this.setState({
@@ -186,9 +188,23 @@ export default class Index extends Component {
             Taro.showModal({
                 title:'提示',
                 content:'删除不可恢复！',
-                success:(res)=>{
+                success:async (res)=>{
                     if(res.confirm){
-                        config.splice(noteIndex,1);
+						let config={
+							url: '/api/note/delete',
+							data:{
+								id:noteId
+							},
+							isLoad:true,
+							headers:{
+								Authorization:token,
+							}
+						}
+						let $res= await http.POST(config);
+						if($res.code == 200){
+							Utils.msg('删除成功')
+							config.splice(noteIndex,1);
+						}
                     }else{
                         config[noteIndex].isOpened = false;
                     }
@@ -198,7 +214,7 @@ export default class Index extends Component {
                 }
             })
         }
-    }
+	}
     //重命名弹窗关闭事件
     handleModalClose() {
         this.setState({
@@ -212,14 +228,30 @@ export default class Index extends Component {
         })
     }
     //重命名弹窗确定事件
-    handleModalConfirm() {
-        let { config ,noteIndexName,noteIndex} = this.state;
-        config[noteIndex].title = noteIndexName;
-        config[noteIndex].isOpened = false;
-        this.setState({
-            isOpened:false,
-            config,
-        })
+    async handleModalConfirm() {
+        let { config ,noteIndexName,noteIndex,token,noteId} = this.state;
+		config[noteIndex].title = noteIndexName;
+		config[noteIndex].isOpened = false;
+		let query={
+			url: '/api/note/update',
+			data:{
+				title:noteIndexName,
+				id:noteId,
+			},
+			isLoad:true,
+			headers:{
+				Authorization:token,
+			}
+		}
+		let $res= await http.POST(query);
+		if($res.code == 200){
+			console.log($res)
+			this.setState({
+				isOpened:false,
+				config,
+			})
+		}
+
     }
     //修改笔记名字
     handleNoteRename(event){
@@ -230,15 +262,17 @@ export default class Index extends Component {
     //去创建文章
     goCreateNote(){
         Taro.navigateTo({
-            url:'/pages/create-note/index'
+            url:'/pages/create-note/index?isDir=0'
         })
-    }
+	}
+	//去笔记详情
 	goNoteDetail(item){
-		console.log(item)
 		Taro.navigateTo({
 			url:`/pages/note-detail/index?id=${item.id}`
 		})
 	}
+
+
     componentDidHide() { }
     render() {
         let { config,isOpened } = this.state;
@@ -248,7 +282,7 @@ export default class Index extends Component {
                     config.map((item, index) => (
                         <SwipeAction
                             key={index}
-                            onOpened={this.handleSingle.bind(this, index)}
+                            onOpened={this.handleSingle.bind(this, index,item)}
                             isOpened={item.isOpened}
                             options={item.options}
                             onClick={this.handleClick}

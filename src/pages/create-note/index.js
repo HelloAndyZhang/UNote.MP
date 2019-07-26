@@ -4,6 +4,7 @@ import './index.scss'
 import { delayQuerySelectorCtx } from '@/utils/dom'
 import Utils from '@/utils/index'
 import classNames from 'classnames';
+import http from '@/utils/http';
 export default class Folder extends Component {
     static options = {
         addGlobalClass: true
@@ -72,14 +73,23 @@ export default class Folder extends Component {
     }
     componentWillMount() {
 
-    }
+	}
+	componentDidShow() {
+		let token = Utils.session('token');
+
+		let {isDir,dirId } = this.$router.params;
+		this.setState({
+			isDir:isDir||0,
+			dirId:dirId||0,
+			token,
+		})
+	}
+
     handleEditorFormat(item) {
-        console.log(item)
         this.editorCtx.format(item.key, item.value)
     }
     onStatusChange(event) {
       if( Object.keys(event.detail).length>0){
-        console.log(event)
           this.setState({
               editorFormat: event.detail
           })
@@ -97,19 +107,32 @@ export default class Folder extends Component {
         })
     }
     handleSaveArticle() {
-        let { title } = this.state;
+		let { title,isDir,dirId,token} = this.state;
         this.editorCtx.getContents({
-            success(res) {
+            success:async (res)=> {
                 if(res.errMsg == 'ok'){
-                    Utils.session('article',{
-                        title:title,
-                        nodes:res.html
-                    });
-                    setTimeout(()=>{
-                        Taro.navigateTo({
-                            url:'/pages/note-detail/index'
-                        })
-                    },300)
+					let config={
+						url:'/api/note/create',
+						data:{
+							title,
+							content:res.html,
+							isDir,
+							dirId
+						},
+						isLoad:true,
+						headers:{
+							Authorization:token
+						},
+					}
+					let $res= await http.POST(config);
+					if($res.code == 200){
+						Utils.msg('创建成功!')
+						setTimeout(()=>{
+							Taro.navigateTo({
+								url:`/pages/note-detail/index?id=${$res.data.id}`
+							})
+						},300)
+					}
                 }
             }
         })
@@ -119,7 +142,6 @@ export default class Folder extends Component {
 
     componentWillUnmount() { }
 
-    componentDidShow() { }
 
     componentDidHide() { }
     render() {
