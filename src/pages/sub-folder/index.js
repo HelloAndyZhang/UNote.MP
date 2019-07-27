@@ -234,13 +234,12 @@ export default class SubFolder extends Component {
             })
         },400)
     }
-    handleNewFolder(){
-        this.setState({
-            isOpened:true,
-            modal_index:2,
-            modal_name:'请输入文件夹名字',
-        })
-    }
+    	//去笔记详情
+	goNoteDetail(item){
+		Taro.navigateTo({
+			url:`/pages/note-detail/index?id=${item.id}`
+		})
+	}
     componentDidHide() { }
     render() {
         let { config,isOpened ,modal_name} = this.state;
@@ -251,12 +250,12 @@ export default class SubFolder extends Component {
                         <SwipeAction
                             index={index}
                             key={index}
-                            onOpened={this.handleSingle.bind(this, index)}
+                            onOpened={this.handleSingle.bind(this, index,item)}
                             isOpened={item.isOpened}
                             options={item.options}
                             onClick={this.handleClick}
                         >
-                            <View className='u-cell-item'>
+                            <View className='u-cell-item' onClick={this.goNoteDetail.bind(this.item)}>
                                 <View className='u-cell_title'>
                                     {   
 										item.isDir == 1 ?

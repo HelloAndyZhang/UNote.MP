@@ -7,7 +7,8 @@ import Utils from '@/utils/index'
 import classNames from 'classnames';
 import http from '@/utils/http';
 import note_icon from '@/assets/note_icon.png'
-import folder from '@/assets/Folder.png';   
+import folder from '@/assets/Folder.png'; 
+import nodata from '@/assets/empty-nodata.png'    
 export default class Folder extends Component {
     static options = {
         addGlobalClass: true
@@ -109,6 +110,7 @@ export default class Folder extends Component {
             item.isOpened = key === index
             return item
         })
+        console.log(index,item)
         this.setState({
             config,
             noteIndexName: config[index].title,
@@ -207,7 +209,7 @@ export default class Folder extends Component {
 					isOpened:false,
 					noteIndexName:'',
 				},()=>{
-					this.getNoteList()
+					this.getFolderList()
 				})
 			}
         }
@@ -318,7 +320,7 @@ export default class Folder extends Component {
                     config.map((item, index) => (
                         <SwipeAction
                             index={index}
-                            onOpened={this.handleSingle.bind(this, index)}
+                            onOpened={this.handleSingle.bind(this,index,item)}
                             isOpened={item.isOpened}
                             options={item.options}
                             onClick={this.handleClick}
@@ -339,6 +341,13 @@ export default class Folder extends Component {
                             </View>
                         </SwipeAction>
                     ))
+                }
+                {
+                    config.length == 0&&
+                    <View className='nodata'>
+                        <Image src={nodata} className='img'></Image>
+                        <View className='text'>文件夹空空如也，立刻去添加文档吧。</View>
+                    </View>
                 }
                 <View className={classNames('float-pup',{'float-pup--active':isPupShow})} >
                     <View className='float-pup__overlay' onClick={this.handleTogglePup.bind(this)}></View>

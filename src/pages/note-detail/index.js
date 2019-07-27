@@ -10,7 +10,7 @@ export default class Note extends Component {
     }
     config = {
         navigationBarTitleText: '文件夹',
-        enablePullDownRefresh: false,
+        disableScroll: true
     }
     constructor(props) {
         super(props)
@@ -69,7 +69,8 @@ export default class Note extends Component {
 			this.setState({
 				title:$res.data.title,
 				nodes:$res.data.content
-			})
+            })
+            Taro.setNavigationBarTitle({title:$res.data.title})
 		}else{
 			Utils.msg($res.msg)
 		}

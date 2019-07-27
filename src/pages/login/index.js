@@ -4,7 +4,7 @@ import './index.scss'
 import logo from '@/assets/logo.png'
 import Utils from '@/utils/index'
 import http from '@/utils/http';
-export default class Index extends Component {
+export default class Login extends Component {
 
     config = {
         navigationBarTitleText: '登录',
@@ -112,21 +112,19 @@ export default class Index extends Component {
     render() {
         let { mobile, password } = this.state;
         return (
-            <View className='page-ucenter'>
-                <View class="page-login">
-                    <View class="logo">
-                        <Image src={logo} class="img"></Image>
+            <View class="page-login">
+                <View class="logo">
+                    <Image src={logo} class="img"></Image>
+                </View>
+                <View class="title">优秀如你 灼灼其华</View>
+                <View class="box">
+                    <View class="phone line-bottom">
+                        <Input type='number' placeholder='请输入手机号码' value={mobile} onInput={this.handleMobileInput.bind(this)} placeholderStyle="placeholder" maxLength='11' />
                     </View>
-                    <View class="title">优秀如你 灼灼其华</View>
-                    <View class="box">
-                        <View class="phone line-bottom">
-                            <Input type='number' placeholder='请输入手机号码' value={mobile} onInput={this.handleMobileInput.bind(this)} placeholderStyle="placeholder" maxLength='11' />
-                        </View>
-                        <View class="phone line-bottom">
-                            <Input type='password' placeholder='请输入密码' value={password} onInput={this.handlePwdInput.bind(this)} placeholderStyle="placeholder" maxLength='11' />
-                        </View>
-                        <Button class="btn" onClick={this.handleUserLogin.bind(this)}>登录</Button>
+                    <View class="phone line-bottom">
+                        <Input type='password' placeholder='请输入密码' value={password} onInput={this.handlePwdInput.bind(this)} placeholderStyle="placeholder" maxLength='11' />
                     </View>
+                    <Button class="btn" onClick={this.handleUserLogin.bind(this)}>登录</Button>
                 </View>
             </View>
         )
