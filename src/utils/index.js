@@ -25,7 +25,6 @@ const session = (key, val) => {
         if (val instanceof Object) {
             val = JSON.stringify(val);
         }
-        console.log(val)
         Taro.setStorageSync(key, val);
         return;
     }
@@ -62,7 +61,6 @@ const checkPhone = (m) => {
  * @param {String} text
  */
 const msg = (title, icon = 'none') => {
-  console.log(icon)
     Taro.showToast({
         title,
         icon

@@ -106,6 +106,7 @@ export default class Folder extends Component {
             title:event.target.value
         })
     }
+    //保存文章
     handleSaveArticle() {
 		let { title,isDir,dirId,token} = this.state;
         this.editorCtx.getContents({
@@ -128,7 +129,7 @@ export default class Folder extends Component {
 					if($res.code == 200){
 						Utils.msg('创建成功!')
 						setTimeout(()=>{
-							Taro.navigateTo({
+							Taro.redirectTo({
 								url:`/pages/note-detail/index?id=${$res.data.id}`
 							})
 						},300)

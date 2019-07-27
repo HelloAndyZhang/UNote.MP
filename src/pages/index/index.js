@@ -282,6 +282,7 @@ export default class Index extends Component {
                     config.map((item, index) => (
                         <SwipeAction
                             index={index}
+                            key={index}
                             onOpened={this.handleSingle.bind(this, index,item)}
                             isOpened={item.isOpened}
                             options={item.options}

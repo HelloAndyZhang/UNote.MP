@@ -220,7 +220,8 @@ export default class SwipeAction extends Component {
 						>
 							{options.map((item, key) => (
 								<View
-									index={key}
+                                    index={key}
+                                    key={key}
 									style={item.style}
 									onClick={this.handleClick.bind(this, item, key)}
 									className={classNames(
