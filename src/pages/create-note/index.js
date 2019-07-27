@@ -58,7 +58,8 @@ export default class Folder extends Component {
                 key: 'align',
                 value: 'justify'
             }],
-            title:''
+            title:'',
+            id:null,
         }
         this.editorCtx = null; // 编辑器上下文
     }
@@ -76,13 +77,15 @@ export default class Folder extends Component {
 	}
 	componentDidShow() {
 		let token = Utils.session('token');
-
-		let {isDir,dirId } = this.$router.params;
+		let {isDir,dirId,id } = this.$router.params;
 		this.setState({
 			isDir:isDir||0,
 			dirId:dirId||0,
-			token,
-		})
+            token,
+            id
+		},()=>{
+            id&&this.getNoteDetail()
+        })
 	}
 
     handleEditorFormat(item) {
@@ -106,39 +109,89 @@ export default class Folder extends Component {
             title:event.target.value
         })
     }
+    	//获取订单详情
+	async getNoteDetail(){
+		let {token,id } = this.state;
+		let config={
+			url: '/api/note/getInfo',
+			data:{
+				id,
+			},
+			headers:{
+				Authorization:token
+			},
+			isLoad:true
+		}
+		let $res= await http.POST(config);
+		if( $res.code == 200){
+			this.setState({
+				title:$res.data.title,
+            })
+            this.editorCtx.setContents({
+                html:$res.data.content,
+            })
+            Taro.setNavigationBarTitle({title:$res.data.title})
+		}else{
+			Utils.msg($res.msg)
+		}
+	}
     //保存文章
     handleSaveArticle() {
-		let { title,isDir,dirId,token} = this.state;
+		let { title,isDir,dirId,token,id} = this.state;
         this.editorCtx.getContents({
             success:async (res)=> {
                 if(res.errMsg == 'ok'){
-					let config={
-						url:'/api/note/create',
-						data:{
-							title,
-							content:res.html,
-							isDir,
-							dirId
-						},
-						isLoad:true,
-						headers:{
-							Authorization:token
-						},
-					}
-					let $res= await http.POST(config);
-					if($res.code == 200){
-						Utils.msg('创建成功!')
-						setTimeout(()=>{
-							Taro.redirectTo({
-								url:`/pages/note-detail/index?id=${$res.data.id}`
-							})
-						},300)
-					}
+                    let config 
+                    if(id){
+                        let query={
+                            url: '/api/note/update',
+                            data:{
+                                title,
+                                id,
+                                content:res.html,
+                            },
+                            isLoad:true,
+                            headers:{
+                                Authorization:token,
+                            }
+                        }
+                        let $res= await http.POST(query);
+                        if($res.code == 200){
+                            Utils.msg('修改成功!');
+                            setTimeout(()=>{
+                                Taro.navigateBack({
+                                    delta:1
+                                })
+                            },300)
+                        }
+                    }else{
+                        let config={
+                            url:'/api/note/create',
+                            data:{
+                                title,
+                                content:res.html,
+                                isDir,
+                                dirId
+                            },
+                            isLoad:true,
+                            headers:{
+                                Authorization:token
+                            },
+                        }
+                        let $res= await http.POST(config);
+                        if($res.code == 200){
+                            Utils.msg('创建成功!')
+                            setTimeout(()=>{
+                                Taro.redirectTo({
+                                    url:`/pages/note-detail/index?id=${$res.data.id}`
+                                })
+                            },300)
+                        }
+                    }
                 }
             }
         })
     }
-
     componentDidMount() { }
 
     componentWillUnmount() { }
@@ -146,7 +199,7 @@ export default class Folder extends Component {
 
     componentDidHide() { }
     render() {
-        let { formatlist,editorFormat } = this.state;
+        let { formatlist,editorFormat,title } = this.state;
         return (
             <View className='page-create'>
                 <View className='header'>
@@ -162,11 +215,11 @@ export default class Folder extends Component {
                 </View>
                 <View className='edit-content'>
                     <View className='title'>
-                        <Input placeholder='请输入标题' className='input' onInput={this.handleInputTitle.bind(this)}   placeholderClass='placeholderClass'></Input>
+                        <Input placeholder='请输入标题' value={title} className='input' onInput={this.handleInputTitle.bind(this)}   placeholderClass='placeholderClass'></Input>
                     </View>
                     <Editor id="editor"
                         className="editor"
-                        placeholder="你的语言四季如春"
+                        placeholder="Hi "
                         onstatuschange={this.onStatusChange.bind(this)}
                         onReady={this.onEditorReady.bind(this)}>
                     </Editor>

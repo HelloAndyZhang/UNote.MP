@@ -68,17 +68,19 @@ export default class Note extends Component {
 		if( $res.code == 200){
 			this.setState({
 				title:$res.data.title,
-				nodes:$res.data.content
+                nodes:$res.data.content,
+                article:$res.data
             })
             Taro.setNavigationBarTitle({title:$res.data.title})
 		}else{
 			Utils.msg($res.msg)
 		}
 	}
-    //去创建文章
+    //去修改文章
     goCreateNote(){
+        let { article } = this.state;
         Taro.navigateTo({
-            url:'/pages/create-note/index?isDir=0'
+            url:`/pages/create-note/index?isDir=${article.isDir}&dirId=${article.dirId}&id=${article.id}`
         })
 	}
     componentDidHide() { }
