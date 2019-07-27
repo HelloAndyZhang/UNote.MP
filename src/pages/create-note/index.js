@@ -153,7 +153,7 @@ export default class Folder extends Component {
                         {
                             formatlist.map((item, index) => {
                                 return (
-                                    <Text className={classNames('iconfont tool-bar__item', item.style ,{ 'tool-bar__item': editorFormat[item.key] != '' ? true:false } )} onClick={this.handleEditorFormat.bind(this, item)} key={index}></Text>
+                                    <Text className={classNames('iconfont tool-bar__item', item.style ,{ 'tool-bar__item': editorFormat[item.key] != '' ? true:false } )} onClick={this.handleEditorFormat.bind(this, item)} index={index}></Text>
                                 )
                             })
                         }

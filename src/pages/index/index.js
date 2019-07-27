@@ -177,7 +177,7 @@ export default class Index extends Component {
     //点击单元格时触发
     handleClick = (item, key, e) => {
         console.log('触发了点击', item, key, e)
-        let {noteIndex,config,noteId,token ,noteId } = this.state;
+        let {noteIndex,config,noteId,token } = this.state;
         //重命名
         if(item.index == 1){
             this.setState({
@@ -281,7 +281,7 @@ export default class Index extends Component {
                 {
                     config.map((item, index) => (
                         <SwipeAction
-                            key={index}
+                            index={index}
                             onOpened={this.handleSingle.bind(this, index,item)}
                             isOpened={item.isOpened}
                             options={item.options}

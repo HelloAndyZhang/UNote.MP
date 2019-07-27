@@ -280,7 +280,7 @@ export default class Folder extends Component {
                 {
                     config.map((item, index) => (
                         <SwipeAction
-                            key={index}
+                            index={index}
                             onOpened={this.handleSingle.bind(this, index)}
                             isOpened={item.isOpened}
                             options={item.options}
