@@ -87,22 +87,6 @@ export default class Index extends Component {
             Taro.stopPullDownRefresh();
         },300)
     }
-    //获取文件夹列表
-    async getNotesList(){
-      let {token } = this.state;
-      let config={
-        url:'/api/note/list',
-        params:{
-          page:1,
-          limit:10
-        },
-        headers:{
-          token
-        },
-        isLoad:true
-     }
-     let $res= await http.GET(config);
-    }
     async getUpdataUserInfo(data){
       let { token } = this.state;
       let config={

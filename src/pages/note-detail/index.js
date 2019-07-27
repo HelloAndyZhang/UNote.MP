@@ -75,7 +75,12 @@ export default class Note extends Component {
 			Utils.msg($res.msg)
 		}
 	}
-
+    //去创建文章
+    goCreateNote(){
+        Taro.navigateTo({
+            url:'/pages/create-note/index?isDir=0'
+        })
+	}
     componentDidHide() { }
     render() {
         const {nodes,title } = this.state;
@@ -84,7 +89,14 @@ export default class Note extends Component {
                 <View className='title'>
                     {title}
                 </View>
-                <RichText nodes={nodes} onClick={this.handleClickRichText.bind(this)} className="editor"></RichText>
+                <View className='open_btn' onClick={this.goCreateNote.bind(this)}>
+                    <Text className='iconfont icon-icon_xie icon'></Text>
+                </View>
+                <View className='rich_text'>
+                    <RichText nodes={nodes} onClick={this.handleClickRichText.bind(this)} className="editor"></RichText>
+
+
+                </View>
             </View>
         )
     }

@@ -2,22 +2,53 @@
 .page-detail{
     height: 100%;
     background: #fff;
-    padding: 30px;
+    
     box-shadow:inset 0px 15px 10px -15px #e5e5e5;
+    position: relative;
     .title{
-        height: 100px;
-        line-height: 100px;
+        padding: 0 30px;
+        position: absolute;
+        height: 80px;
+        line-height:80px;
         font-size: 36px;
         color: #333;
-        margin-bottom: 30px;
         @include hairline-bottom(#e5e5e5);
     }
-    .editor{
-        
-        width: 100%;
-        min-height: 450px;
-        color: #1a1a1a;
-        font-size: 30px;
-        font-style:normal
+    .rich_text{
+        position: absolute;
+        top: 80px;
+        left: 0px;
+        right:0px;
+        bottom: 30px;
+        padding: 30px;
+        overflow-y: auto;
+        .editor{
+            width: 100%;
+            min-height: 450px;
+            color: #1a1a1a;
+            font-size: 30px;
+            font-style:normal;
+            word-wrap:break-word;
+            word-break:break-all;
+        }
+    }
+    .open_btn{
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 2018;
+        width: 90px;
+        height: 90px;
+        background: #0088fb;
+        box-shadow: 0 1px 4px 0 rgba(0,136,251,.49);
+        border-radius: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include active();
+        .icon{
+            font-size:38px;
+            color: #fff;
+        }
     }
 }

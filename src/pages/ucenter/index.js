@@ -1,19 +1,17 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text,Editor ,RichText } from '@tarojs/components'
-import { delayQuerySelectorCtx } from '@/utils/dom';
-import SwipeAction from '@/components/swipe-action/index';
-import Noticebar from '@/components/noticebar/index';
 import './index.scss'
 
-export default class Index extends Component {
-
+export default class UCenter extends Component {
   config = {
 	navigationBarTitleText: '我的',
 	disableScroll: true
   }                   
   constructor(){
     super()
-    this.state ={}
+    this.state ={
+        token:''
+    }
   }
   //分享
   onShareAppMessage() {
@@ -24,28 +22,34 @@ export default class Index extends Component {
   componentWillPreload () {
     
   }
-  componentWillMount () { }
+  componentWillMount () { 
+    this.setState({
+        token:Utils.session('token')
+      })
+  }
 
   componentDidMount () { }
 
   componentWillUnmount () { }
 
-  componentDidShow () { }
-  handleSingle(index){
-	  const config = this.state.config.map((item, key) => {
-			item.isOpened = key === index
-			return item
-	  })
-	  this.setState({
-		config
-	  })
-  }
-  handleClick = (item, key, e) => {
-    console.log('触发了点击', item, key, e)
-  }
+  componentDidShow () {
+      this.getShareCode()
+   }
+
   componentDidHide () { }
+  getShareCode(){
+    let {token } = this.state;
+    let config={
+      url:'/api/user/shareCode',
+      headers:{
+        token
+      },
+      isLoad:true
+   }
+   let $res= await http.GET(config);
+   console.log($res)
+  }
   render () {
-	let {config} = this.state;
     return (
       <View className='page-ucenter'>
           我的

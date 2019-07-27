@@ -255,7 +255,7 @@ export default class SubFolder extends Component {
                             options={item.options}
                             onClick={this.handleClick}
                         >
-                            <View className='u-cell-item' onClick={this.goNoteDetail.bind(this.item)}>
+                            <View className='u-cell-item' onClick={this.goNoteDetail.bind(this,item)}>
                                 <View className='u-cell_title'>
                                     {   
 										item.isDir == 1 ?

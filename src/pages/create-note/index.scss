@@ -75,7 +75,9 @@
             height: 100%;
             color: #1a1a1a;
             font-size: 30px;
-            font-style:normal
+            font-style:normal;
+            word-wrap:break-word;
+            word-break:break-all;
         }
     }
     .plane_btn{
@@ -88,6 +90,7 @@
       text-align: center;
       line-height: 90px;
       box-shadow: 0 3px 15px 3px rgba(51, 51, 51, 0.5);
+      background: #fff;
       .icon-fabusekuai {
           font-size: 40px;
       }
