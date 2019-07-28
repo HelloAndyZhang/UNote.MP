@@ -91,9 +91,22 @@ export default class UCenter extends Component {
         }
         let $res = await http.GET(config);
         if ($res.code == 200) {
-            this.setState({
-                qrcode: `data:image/png;base64,${$res.data}`
-            })
+            const filePath = `${wx.env.USER_DATA_PATH}/temp_image.jpeg`;
+            /// 将base64转为二进制数据
+            const buffer = wx.base64ToArrayBuffer(`${$res.data}`);
+            /// 绘制成图片
+            wx.getFileSystemManager().writeFile({
+                filePath,
+                data: buffer,
+                encoding: 'binary',
+                success:() =>{
+                    this.setState({
+                        qrcode:filePath
+                    })
+                },
+                fail() {}
+            });
+
         }
     }
     /* 绘制canvas */
@@ -102,9 +115,11 @@ export default class UCenter extends Component {
         this.drawCanvas()
     }
     async drawCanvas() {
-        let {qrcode,user_info } = this.state;
+        let {qrcode,user_info} = this.state;
         let  shareBg = await Utils.downLoadImg('https://otherfiles-ali.uupt.com/Stunner/FE/SecKill/shop-share-save-edit1.png');
         let avatarBg = await Utils.downLoadImg(user_info.avatarUrl);
+        console.log(avatarBg)
+        console.log(qrcode)
         let $res = await Taro.getSystemInfoSync();
         let pixelRatio = $res.pixelRatio;
         let windowWidth = $res.windowWidth;
@@ -116,7 +131,7 @@ export default class UCenter extends Component {
         ctx.fillRect(0, 0, 339 * XS, 522 * XS)
         /* 背景图 */
         ctx.drawImage(shareBg.data, 0 * XS, 0 * XS, 278 * XS, 440 * XS)
-        // /* 店铺logo */
+        /* 店铺logo */
         ctx.save()
         ctx.beginPath()
         ctx.arc((108 + 60 / 2) * XS, (85 + 60 / 2) * XS, (60 / 2) * XS, 0, 2 * Math.PI)
