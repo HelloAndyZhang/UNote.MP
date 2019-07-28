@@ -137,11 +137,13 @@ export default class Folder extends Component {
 	}
     //保存文章
     handleSaveArticle() {
-		let { title,isDir,dirId,token,id} = this.state;
+        let { title,isDir,dirId,token,id} = this.state;
+        if(!title){
+          return  Utils.msg('标题不能为空袄')
+        }
         this.editorCtx.getContents({
             success:async (res)=> {
                 if(res.errMsg == 'ok'){
-                    let config 
                     if(id){
                         let query={
                             url: '/api/note/update',

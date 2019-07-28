@@ -1,68 +1,219 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text,Editor ,RichText } from '@tarojs/components'
+import { View, Text, Editor, RichText, Button } from '@tarojs/components'
 import './index.scss'
 import Utils from '@/utils/index'
 import http from '@/utils/http';
+import refresh_btn from '@/assets/refresh.png';
+import save_btn from '@/assets/saveImg.png'
 export default class UCenter extends Component {
-  config = {
-	navigationBarTitleText: '我的',
-	disableScroll: true
-  }                   
-  constructor(){
-    super()
-    this.state ={
-        token:'',
-        qrcode:''
+    config = {
+        navigationBarTitleText: '我的',
+        disableScroll: true
     }
-  }
-  //分享
-  onShareAppMessage() {
-    return {
-      title:'我的优笔记',
+    constructor() {
+        super()
+        this.state = {
+            token: '',
+            qrcode: '',
+            user_info:{},
+            share_img:false
+        }
     }
-  }
-  componentWillPreload () {
-    
-  }
-  componentWillMount () { 
-    this.setState({
-        token:Utils.session('token')
-      })
-  }
+    //分享
+    onShareAppMessage() {
+        return {
+            title: '我的优笔记',
+        }
+    }
+    componentWillPreload() {
 
-  componentDidMount () { }
+    }
+    componentWillMount() {
+        this.setState({
+            token: Utils.session('token')
+        })
+    }
 
-  componentWillUnmount () { }
+    componentDidMount() { }
 
-  componentDidShow () {
-      this.getShareCode()
-   }
+    componentWillUnmount() { }
 
-  componentDidHide () { }
-  async getShareCode(){
-    let {token } = this.state;
-    let config={
-      url:'/api/user/shareCode',
-      headers:{
-        Authorization:token
-      },
-      isLoad:true
-   }
-   let $res= await http.GET(config);
-   console.log($res)
-   if($res.code == 200){
-       this.setState({
-           qrcode:`data:image/png;base64,${$res.data}`
-       })
-   }
-  }
-  render () {
-    let {qrcode} = this.state;
-    return (
-      <View className='page-ucenter'>
-          我的
-          <Image src={qrcode} className='img'></Image>
-      </View>
-    )
-  }
+    componentDidShow() {
+        this.getShareCode();
+        this.setUserInfo()
+    }
+    async setUserInfo() {
+        let $res = await Taro.getUserInfo();
+        let {token} = this.state;
+		let config={
+			url: '/api/user/syncUserInfo',
+			headers:{
+				Authorization:token
+            },
+            data:$res.userInfo,
+			isLoad:true
+		}
+		let $$res= await http.POST(config);
+		if($$res.code == 200){
+            this.getUserInfo()
+		}else{
+			Utils.msg($$res.msg)
+		}
+    }
+    async getUserInfo(){
+        let {token} = this.state;
+		let config={
+			url: '/api/user/getUserInfo',
+			headers:{
+				Authorization:token
+            },
+			isLoad:true
+		}
+		let $res= await http.GET(config);
+		if( $res.code == 200){
+            this.setState({
+                user_info:$res.data
+            })
+		}else{
+			Utils.msg($res.msg)
+		}
+
+    }
+    componentDidHide() { }
+    async getShareCode() {
+        let { token } = this.state;
+        let config = {
+            url: '/api/user/shareCode',
+            headers: {
+                Authorization: token
+            },
+            isLoad: true
+        }
+        let $res = await http.GET(config);
+        if ($res.code == 200) {
+            this.setState({
+                qrcode: `data:image/png;base64,${$res.data}`
+            })
+        }
+    }
+    /* 绘制canvas */
+    handleCreateShareImg(){
+        Utils.showLoading()
+        this.drawCanvas()
+    }
+    async drawCanvas() {
+        let {qrcode,user_info } = this.state;
+        let  shareBg = await Utils.downLoadImg('https://otherfiles-ali.uupt.com/Stunner/FE/SecKill/shop-share-save-edit1.png');
+        let avatarBg = await Utils.downLoadImg(user_info.avatarUrl);
+        let $res = await Taro.getSystemInfoSync();
+        let pixelRatio = $res.pixelRatio;
+        let windowWidth = $res.windowWidth;
+        let windowHeight = $res.windowHeight;
+        // 屏幕系数比，以设计稿375*667（iphone7）为例
+        let XS = windowWidth / 375;
+        const ctx = Taro.createCanvasContext('Canvas');
+        ctx.setFillStyle('#fff')
+        ctx.fillRect(0, 0, 339 * XS, 522 * XS)
+        /* 背景图 */
+        ctx.drawImage(shareBg.data, 0 * XS, 0 * XS, 278 * XS, 440 * XS)
+        // /* 店铺logo */
+        ctx.save()
+        ctx.beginPath()
+        ctx.arc((108 + 60 / 2) * XS, (85 + 60 / 2) * XS, (60 / 2) * XS, 0, 2 * Math.PI)
+        ctx.clip()
+        ctx.drawImage(avatarBg.data, 108 * XS, 85 * XS, 60 * XS, 60 * XS);
+        ctx.restore()
+        //店铺名字
+        ctx.setFontSize(15 * XS);
+        ctx.setFillStyle('#202f4b')
+        ctx.setTextAlign('center');
+        this.fontLineFeed(ctx, user_info.nickName, 16, 18 * XS, 138 * XS, 172 * XS)
+        /* 二维码 */
+        ctx.drawImage(qrcode, 42 * XS, 264 * XS, 72 * XS, 72 * XS)
+        ctx.draw();
+        Utils.hideLoading()
+        console.log('1313131')
+        this.setState({
+            share_img:true,
+        })
+    }
+    handleShareClose() {
+        Utils.hideLoading()
+        this.setState({
+            share_img:false,
+        })
+    }
+    // 文字换行
+    /**
+     * ctx,画布对象
+     * str,需要绘制的文字
+     * splitLen,切割的长度字符串
+     * strHeight,每行文字之间的高度
+     * x,位置
+     * y
+     */
+    fontLineFeed(ctx, str, splitLen, strHeight, x, y) {
+        let strArr = [];
+        for (let i = 0, len = str.length / splitLen; i < len; i++) {
+            strArr.push(str.substring(i * splitLen, i * splitLen + splitLen));
+        }
+        if (str.length > splitLen) {
+            strArr[0] = strArr[0] + '...';
+        }
+        ctx.fillText(strArr[0], x, y);
+    }
+    /* 保存图片 */
+    handleSaveImg() {
+        wx.canvasToTempFilePath({
+            canvasId: 'Canvas',
+            success: res => {
+                wx.saveImageToPhotosAlbum({
+                    filePath: res.tempFilePath,
+                    success: res => {
+                        Utils.msg('图片保存成功','success')
+                    },
+                    fail: err => {
+                    }
+                })
+            }
+        })
+    }
+    //刷新太阳码
+    handleRefreshImg() {
+        Utils.showLoading('重新生成中');
+        this.drawCanvas()
+    }
+    render() {
+        let {share_img,user_info } = this.state;
+        return (
+            <View className='page-ucenter'>
+                <View className="m-profile">
+                    <View className='avatar'>
+                        <Image src={user_info.avatarUrl} className='img'></Image>
+                    </View>
+                    <View className='user-info-list'>
+                        <View className='nickname'>AndyZhang</View>
+                        <View className='cityname'>AndyZhang</View>
+                    </View>
+                </View>
+                <Button className='share_btn' onClick={ this.handleCreateShareImg.bind(this)}>分享</Button>
+                {
+                    share_img &&
+                    <View className="share_img">
+                        <View className="main">
+                            <Canvas canvas-id='Canvas' className='canvas'></Canvas>
+                            <View className="shareCover">
+                                <Image  className="icon icon_close" src="https://otherfiles-ali.uupt.com/Stunner/FE/C/icon_close.png" onClick={this.handleShareClose.bind(this)} />
+                                <View class="shareBtn">
+                                    <Image  className="save_btn" src={save_btn}  onClick={this.handleSaveImg.bind(this)}/>
+                                    <Image  className="refresh_btn" src={refresh_btn} onClick={this.handleRefreshImg.bind(this)}/>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                }
+
+            </View>
+        )
+    }
 }

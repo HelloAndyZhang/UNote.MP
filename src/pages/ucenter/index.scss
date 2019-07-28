@@ -1,3 +1,120 @@
+.page-ucenter{
+    background: #f5f5f5;
+    height: 100%;
+}
+.m-profile{
+    display: flex;
+    padding: 30px;
+    background: #fff;
+    .avatar{
+        width: 120px;
+        height: 120px;
+        border-radius:50%;
+        overflow: hidden;
+        margin-right: 30px;
+        .img{
+            height: 100%;
+            width: 100%;
+        }
+    }
+    .user-info-list{
+        .nickname{
+            font-weight: 700;
+            font-size: 32px;
+            line-height: 38px;
+            margin-top: 20px;
+            margin-bottom: 6px;
+            display: block;
+            overflow: hidden;
+            color:#595959;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .cityname{
+            font-size: 26px;
+            margin-top: 8px;
+            display: block;
+            overflow: hidden;
+            color:#595959;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+}
+.share_btn{
+    height: 90px;
+    margin: 40px 30px;
+    background: #fff;
+    font-size: 30px;
+    line-height: 90px;
+    outline: none;
+    border: none;
+    color: #333;
+}
+.share_img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    box-sizing: border-box;
+    z-index: 50;
+    .shareCover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .icon_close {
+        position: absolute;
+        top: -22px;
+        right: -18px;
+        z-index: 100;
+    }
+    .shareBtn {
+        position: absolute;
+        bottom: 30px;
+        left: 30px;
+        width: 556px;
+        height: 88px;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        .save_btn {
+            width: 400px;
+            height: 88px;
+        }
+        .refresh_btn {
+            width: 140px;
+            height: 88px;
+        }
+    }
+    .main {
+        border-radius: 10px;
+        background: #f2f2f2;
+        width: 616px;
+        height: 1060px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: auto;
+        padding: 30px;
+        box-sizing: border-box;
+    }
+    .canvas {
+        background: #fff;
+        width: 100%;
+        height: 880px;
+    }
+    .icon_close {
+        width: 42px;
+        height: 42px;
+    }
+}
 .img{
     height: 300px;
     width: 300px;

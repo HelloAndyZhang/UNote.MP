@@ -274,7 +274,7 @@ export default class Index extends Component {
                             className='u-cell-item'>
                             <View className='item' onClick={this.goNoteDetail.bind(this,item)}>
                                 <View className='title'>{item.title}</View>
-                                <View className='time'>{item.time}</View>
+                                <View className='time'>{Utils.getDateDiff(item.time)}</View>
                             </View>
                         </SwipeAction>
                     ))
