@@ -5,8 +5,8 @@ import Utils from './index'
 
 // let BASE_URL = "http://192.168.6.3:9277"; //  6.3
 // let BASE_URL = 'http://192.168.6.249:5000'
-// let BASE_URL = 'http://192.168.6.143:5000'
-let BASE_URL ='http://192.168.2.6:5000'
+let BASE_URL = 'http://192.168.6.143:5000'
+// let BASE_URL ='http://192.168.2.6:5000'
 /**
  * @method get请求
  * @param {Object} opt

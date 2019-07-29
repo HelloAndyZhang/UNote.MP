@@ -88,6 +88,7 @@ export default class Note extends Component {
         const {nodes,title } = this.state;
         return (
             <View className='page-detail'>
+				 {/* <Navigator target="miniProgram" open-type='exit' hover-class="navigator-hover">跳转到新页面</Navigator> */}
                 <View className='title'>
                     {title}
                 </View>

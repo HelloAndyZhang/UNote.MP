@@ -118,8 +118,6 @@ export default class UCenter extends Component {
         let {qrcode,user_info} = this.state;
         let  shareBg = await Utils.downLoadImg('https://otherfiles-ali.uupt.com/Stunner/FE/SecKill/shop-share-save-edit1.png');
         let avatarBg = await Utils.downLoadImg(user_info.avatarUrl);
-        console.log(avatarBg)
-        console.log(qrcode)
         let $res = await Taro.getSystemInfoSync();
         let pixelRatio = $res.pixelRatio;
         let windowWidth = $res.windowWidth;
@@ -147,7 +145,6 @@ export default class UCenter extends Component {
         ctx.drawImage(qrcode, 42 * XS, 264 * XS, 72 * XS, 72 * XS)
         ctx.draw();
         Utils.hideLoading()
-        console.log('1313131')
         this.setState({
             share_img:true,
         })
@@ -207,8 +204,8 @@ export default class UCenter extends Component {
                         <Image src={user_info.avatarUrl} className='img'></Image>
                     </View>
                     <View className='user-info-list'>
-                        <View className='nickname'>AndyZhang</View>
-                        <View className='cityname'>AndyZhang</View>
+                        <View className='nickname'>{user_info.nickName}</View>
+                        <View className='cityname'>{user_info.country}</View>
                     </View>
                 </View>
                 <Button className='share_btn' onClick={ this.handleCreateShareImg.bind(this)}>分享</Button>

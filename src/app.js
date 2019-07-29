@@ -11,67 +11,73 @@ import './styles/index.scss'
 
 class App extends Component {
 
-  config = {
-    pages: [
-      'pages/login/index',
-      'pages/index/index',
-      'pages/folder/index',
-      'pages/ucenter/index',
-      'pages/create-note/index',
-      'pages/note-detail/index',
-      'pages/auth/index',
-      'pages/sub-folder/index'
-    ],
-    window: {
-      backgroundTextStyle: 'dark',
-      navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: '我的优笔记',
-      navigationBarTextStyle: 'black',
-    },
-    tabBar:{
-        color:'#D9DCE0',
-        borderStyle:"black",
-        position: "bottom",
-        backgroundColor:'#ffffff',
-        selectedColor:'#555555',
-        list: [
-          {
-            pagePath: "pages/index/index",
-            text: "列表",
-            iconPath: "./assets/tab-bar/list.png",
-            selectedIconPath: "./assets/tab-bar/list_on.png"
-          },
-          {
-            pagePath: "pages/folder/index",
-            text: "文件夹",
-            iconPath: "./assets/tab-bar/folder.png",
-            selectedIconPath: "./assets/tab-bar/folder_on.png"
-          },
-          {
-            pagePath: "pages/ucenter/index",
-            text: "我的",
-            iconPath: "./assets/tab-bar/mine.png",
-            selectedIconPath: "./assets/tab-bar/mine_on.png"
-          },
-        ]
-      }
-  }
+	config = {
+		pages: [
+			'pages/login/index',
+			'pages/index/index',
+			'pages/folder/index',
+			'pages/ucenter/index',
+			'pages/create-note/index',
+			'pages/note-detail/index',
+			'pages/auth/index',
+			'pages/sub-folder/index'
+		],
+		window: {
+			backgroundTextStyle: 'dark',
+			navigationBarBackgroundColor: '#fff',
+			navigationBarTitleText: '我的优笔记',
+			navigationBarTextStyle: 'black',
+		},
+		tabBar: {
+			color: '#D9DCE0',
+			borderStyle: "black",
+			position: "bottom",
+			backgroundColor: '#ffffff',
+			selectedColor: '#555555',
+			list: [
+				{
+					pagePath: "pages/index/index",
+					text: "列表",
+					iconPath: "./assets/tab-bar/list.png",
+					selectedIconPath: "./assets/tab-bar/list_on.png"
+				},
+				{
+					pagePath: "pages/folder/index",
+					text: "文件夹",
+					iconPath: "./assets/tab-bar/folder.png",
+					selectedIconPath: "./assets/tab-bar/folder_on.png"
+				},
+				{
+					pagePath: "pages/ucenter/index",
+					text: "我的",
+					iconPath: "./assets/tab-bar/mine.png",
+					selectedIconPath: "./assets/tab-bar/mine_on.png"
+				},
+			]
+		},
+		permission: {
+			'scope.userLocation': {
+				desc: '你的位置信息将用于小程序位置接口的效果展示'
+			}
+		}
 
-  componentDidMount () {}
+	}
 
-  componentDidShow () {}
+	componentDidMount() { }
 
-  componentDidHide () {}
+	componentDidShow() { }
 
-  componentDidCatchError () {}
+	componentDidHide() { }
 
-  // 在 App 类中的 render() 函数没有实际作用
-  // 请勿修改此函数
-  render () {
-    return (
-      <Index />
-    )
-  }
+	componentDidCatchError() { }
+
+	// 在 App 类中的 render() 函数没有实际作用
+	// 请勿修改此函数
+	render() {
+		return (
+			<Index />
+		)
+	}
 }
 
 Taro.render(<App />, document.getElementById('app'))
