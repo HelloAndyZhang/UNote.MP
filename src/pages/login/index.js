@@ -14,8 +14,8 @@ export default class Login extends Component {
 	constructor() {
 		super()
 		this.state = {
-			mobile: '13262057521',
-			password: '123456'
+			mobile:'13262057521',
+			password:'123456'
 		}
 	}
 	//分享
@@ -37,7 +37,6 @@ export default class Login extends Component {
 		let $res = await Taro.getLocation({
 			type: "wgs84", //	否	wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
 		})
-		console.log($res)
 		this.getLocation($res.latitude, $res.longitude)
 	}
 	componentDidHide() { }
@@ -63,34 +62,40 @@ export default class Login extends Component {
 		})
 	}
 	async getAuthOpenId() {
-		let res = await Taro.login();
-		if (res.errMsg == "login:ok") {
-			let config = {
-				url: '/api/token',
-				data: {
-					code: res.code
-				},
-				isLoad: true
+		try{
+			let res = await Taro.login();
+			if (res.errMsg == "login:ok") {
+				let config = {
+					url: '/api/token',
+					data: {
+						code: res.code
+					},
+					isLoad: true
+				}
+				let $res = await http.POST(config);
+				Utils.session('openid', $res.openId)
+				this.setState({
+					openid: $res.openId
+				})
+			} else {
+				Utils.msg('授权失败袄');
 			}
-			let $res = await http.POST(config);
-			Utils.session('openid', $res.openId)
-			this.setState({
-				openid: $res.openId
+		}catch(err){
+			Taro.redirectTo({
+				url:'/pages/auth/index'
 			})
-		} else {
-			Utils.msg('授权失败袄');
 		}
 	}
 	//输入账号
 	handleMobileInput(event) {
 		this.setState({
-			mobile: event.target.detail
+			mobile: event.detail.value
 		})
 	}
 	//输入密码
 	handlePwdInput(event) {
 		this.setState({
-			password: event.target.detail
+			password: event.detail.value
 		})
 	}
 
@@ -112,31 +117,38 @@ export default class Login extends Component {
 			Utils.msg('手机号不正确袄');
 			return
 		}
-
-		let time = Math.ceil(new Date().getTime())
-		// 1|${time}
-		let config = {
-			url: '/api/user/login',
-			data: {
-				openid,
-				mobile,
-				password,
-				secret: ""
-			},
-			isLoad: true
-		}
-		let $res = await http.POST(config);
-		if ($res.code == 200) {
-			Utils.session('token', $res.data)
-			this.setState({
-				token: $res.data
-			})
-			Utils.msg('登录成功');
-			setTimeout(() => {
-				Taro.switchTab({
-					url: '/pages/index/index'
+		try{
+			let time = Math.ceil(new Date().getTime())
+			let config = {
+				url: '/api/user/login',
+				data: {
+					openid,
+					mobile,
+					password,
+					secret:`6fc27bd0b2a711e9863fa9e0bf592030`
+				},
+				isLoad: true
+			}
+			let $res = await http.POST(config);
+			if ($res.code == 200) {
+				Utils.session('token', $res.data)
+				this.setState({
+					token: $res.data
 				})
-			}, 600)
+				Utils.msg('登录成功');
+				setTimeout(() => {
+					Taro.switchTab({
+						url: '/pages/index/index'
+					})
+				}, 600)
+			}else{
+				Utils.msg($res.msg)
+			}
+		}
+		catch(err){
+			Taro.redirectTo({
+				url:'/pages/auth/index'
+			})
 		}
 	}
 	render() {

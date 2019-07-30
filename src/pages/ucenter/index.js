@@ -15,7 +15,9 @@ export default class UCenter extends Component {
         this.state = {
             token: '',
             qrcode: '',
-            user_info:{},
+            user_info:{
+				nickName:'优笔记'
+			},
             share_img:false
         }
     }
@@ -40,7 +42,7 @@ export default class UCenter extends Component {
 
     componentDidShow() {
         this.getShareCode();
-        this.setUserInfo()
+		this.setUserInfo()
     }
     async setUserInfo() {
         let $res = await Taro.getUserInfo();
@@ -134,7 +136,7 @@ export default class UCenter extends Component {
         ctx.beginPath()
         ctx.arc((108 + 60 / 2) * XS, (85 + 60 / 2) * XS, (60 / 2) * XS, 0, 2 * Math.PI)
         ctx.clip()
-        ctx.drawImage(avatarBg.data, 108 * XS, 85 * XS, 60 * XS, 60 * XS);
+        avatarBg.data&& ctx.drawImage(avatarBg.data, 108 * XS, 85 * XS, 60 * XS, 60 * XS);
         ctx.restore()
         //店铺名字
         ctx.setFontSize(15 * XS);
@@ -142,7 +144,7 @@ export default class UCenter extends Component {
         ctx.setTextAlign('center');
         this.fontLineFeed(ctx, user_info.nickName, 16, 18 * XS, 138 * XS, 172 * XS)
         /* 二维码 */
-        ctx.drawImage(qrcode, 42 * XS, 264 * XS, 72 * XS, 72 * XS)
+        qrcode&&ctx.drawImage(qrcode, 42 * XS, 264 * XS, 72 * XS, 72 * XS)
         ctx.draw();
         Utils.hideLoading()
         this.setState({

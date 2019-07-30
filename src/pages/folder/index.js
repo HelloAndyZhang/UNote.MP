@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Editor, RichText, Input } from '@tarojs/components'
+import { View, Text, Input } from '@tarojs/components'
 import './index.scss'
 import SwipeAction from '@/components/swipe-action/index';
 import Modal from '@/components/modal/index';
@@ -7,8 +7,8 @@ import Utils from '@/utils/index'
 import classNames from 'classnames';
 import http from '@/utils/http';
 import note_icon from '@/assets/note_icon.png'
-import folder from '@/assets/Folder.png'; 
-import nodata from '@/assets/empty-nodata.png'    
+import folder from '@/assets/Folder.png';
+import nodata from '@/assets/empty-nodata.png'
 export default class Folder extends Component {
     static options = {
         addGlobalClass: true
@@ -238,8 +238,29 @@ export default class Folder extends Component {
     handleSearchKey(event){
         this.setState({
             keyWords:event.target.value
-        })
-    }
+        },()=>{
+			this.getSearchFolder()
+		})
+	}
+	async getSearchFolder(){
+		let {token,keyWords} = this.state;
+		// //新建文件夹
+		let config={
+			url:'/api/note/search',
+			data:{
+				query:keyWords
+			},
+			isLoad:false,
+			headers:{
+				Authorization:token
+			},
+		}
+		let $res= await http.POST(config);
+		if($res.code == 200){
+			console.log($res)
+
+		}
+	}
     handleClearKeyWords(){
         this.setState({
             keyWords:''
@@ -273,7 +294,7 @@ export default class Folder extends Component {
             <View className='page-folder'>
                 <View className='header'>
                     <Text className='iconfont icon-sousuo'></Text>
-                    <Input className='input' value={keyWords} placeholder="搜索" onInput={this.handleSearchKey.bind(this)}></Input>
+                    <Input className='input' type='text' value={keyWords} placeholder="搜索" onInput={this.handleSearchKey.bind(this)}/>
                     {
                         keyWords.length>0&&
                         <Text className='iconfont icon-guanbi' onClick={this.handleClearKeyWords.bind(this)}></Text>
@@ -282,7 +303,8 @@ export default class Folder extends Component {
                 {
                     config.map((item, index) => (
                         <SwipeAction
-                            index={index}
+							index={index}
+							key={index}
                             onOpened={this.handleSingle.bind(this,index,item)}
                             isOpened={item.isOpened}
                             options={item.options}
@@ -290,10 +312,10 @@ export default class Folder extends Component {
                         >
                             <View className='u-cell-item' onClick={this.goNoteList.bind(this,item)}>
                                 <View className='u-cell_title'>
-                                    {   
+                                    {
 										item.isDir == 1 ?
                                         <Image src={folder} className='icon'></Image>
-										:        
+										:
 										<Image src={note_icon} className='icon'></Image>
 									}
                                 </View>
