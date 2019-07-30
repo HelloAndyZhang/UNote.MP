@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import http from '@/utils/http';
 import note_icon from '@/assets/note_icon.png'
 import folder from '@/assets/Folder.png';
-import nodata from '@/assets/empty-nodata.png'  
+import nodata from '@/assets/empty-nodata.png'
 export default class SubFolder extends Component {
     static options = {
         addGlobalClass: true
@@ -46,7 +46,7 @@ export default class SubFolder extends Component {
         },()=>{
             this.getNoteList()
         })
-		
+
 	}
     componentWillMount() {
         this.setState({
@@ -100,6 +100,7 @@ export default class SubFolder extends Component {
 			this.setState({
 				config
 			})
+			Taro.setNavigationBarTitle({title:$res.data.dirTitle})
 		}else{
 			Utils.msg($res.msg)
 		}
@@ -257,10 +258,10 @@ export default class SubFolder extends Component {
                         >
                             <View className='u-cell-item' onClick={this.goNoteDetail.bind(this,item)}>
                                 <View className='u-cell_title'>
-                                    {   
+                                    {
 										item.isDir == 1 ?
                                         <Image src={folder} className='icon'></Image>
-										:        
+										:
 										<Image src={note_icon} className='icon'></Image>
 									}
                                 </View>
@@ -271,7 +272,7 @@ export default class SubFolder extends Component {
                             </View>
                         </SwipeAction>
                     ))
-                    
+
                 }
                 {
                     config.length == 0&&

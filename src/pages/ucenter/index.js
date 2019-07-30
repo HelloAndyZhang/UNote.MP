@@ -41,10 +41,10 @@ export default class UCenter extends Component {
     componentWillUnmount() { }
 
     componentDidShow() {
-        this.getShareCode();
-		this.setUserInfo()
+		this.getUserInfo()
+		this.getShareCode();
     }
-    async setUserInfo() {
+    async handleUserInfo(event) {
         let $res = await Taro.getUserInfo();
         let {token} = this.state;
 		let config={
@@ -114,7 +114,8 @@ export default class UCenter extends Component {
     /* 绘制canvas */
     handleCreateShareImg(){
         Utils.showLoading()
-        this.drawCanvas()
+		this.drawCanvas()
+
     }
     async drawCanvas() {
         let {qrcode,user_info} = this.state;
@@ -203,14 +204,23 @@ export default class UCenter extends Component {
             <View className='page-ucenter'>
                 <View className="m-profile">
                     <View className='avatar'>
-                        <Image src={user_info.avatarUrl} className='img'></Image>
+						{ user_info.avatarUrl?
+							<Image src={user_info.avatarUrl} className='img'></Image>
+							:
+							<Button open-type='getUserInfo'  ongetuserinfo={this.handleUserInfo.bind(this)} className='open_btn' >点</Button>
+						}
+
                     </View>
                     <View className='user-info-list'>
                         <View className='nickname'>{user_info.nickName}</View>
                         <View className='cityname'>{user_info.country}</View>
+
                     </View>
                 </View>
-                <Button className='share_btn' onClick={ this.handleCreateShareImg.bind(this)}>分享</Button>
+				{
+					user_info.isAdmin == 1 &&
+					<Button className='share_btn' onClick={ this.handleCreateShareImg.bind(this)}>分享</Button>
+				}
                 {
                     share_img &&
                     <View className="share_img">
