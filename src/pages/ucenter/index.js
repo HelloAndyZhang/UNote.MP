@@ -39,8 +39,11 @@ export default class UCenter extends Component {
         })
     }
 
-    componentDidMount() {
-
+   async componentDidMount() {
+		let $res = await Taro.getLocation({
+			type: "wgs84", //	否	wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
+		})
+		this.getLocation($res.latitude, $res.longitude);
 	}
 
     componentWillUnmount() { }
@@ -75,11 +78,11 @@ export default class UCenter extends Component {
 					}
 					let $$res= await http.POST(config);
 					if($$res.code == 200){
-						// this.getUserInfo()
+						this.getUserInfo()
 					}else{
 						Utils.msg($$res.msg)
 					}
-					this.getUserInfo()
+
 				}
 			},
 			fail(error) {
@@ -103,10 +106,7 @@ export default class UCenter extends Component {
 		}
 		let $$res= await http.POST(config);
 		if($$res.code == 200){
-			let $res = await Taro.getLocation({
-				type: "wgs84", //	否	wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
-			})
-			this.getLocation($res.latitude, $res.longitude);
+			this.getUserInfo()
 		}else{
 			Utils.msg($$res.msg)
 		}
