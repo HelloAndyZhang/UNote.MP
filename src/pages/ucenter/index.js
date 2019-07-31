@@ -5,6 +5,9 @@ import Utils from '@/utils/index'
 import http from '@/utils/http';
 import refresh_btn from '@/assets/refresh.png';
 import save_btn from '@/assets/saveImg.png'
+import detailIcon from '@/assets/detail_arrow.png'
+import classNames from 'classnames';
+import QQMapWX from '@/utils/qqmap-wx-jssdk.js';
 export default class UCenter extends Component {
     config = {
         navigationBarTitleText: '我的',
@@ -16,7 +19,7 @@ export default class UCenter extends Component {
             token: '',
             qrcode: '',
             user_info:{
-				nickName:'优笔记'
+				nickName:''
 			},
             share_img:false
         }
@@ -36,17 +39,60 @@ export default class UCenter extends Component {
         })
     }
 
-    componentDidMount() { }
+    componentDidMount() {
+
+	}
 
     componentWillUnmount() { }
 
     componentDidShow() {
 		this.getUserInfo()
 		this.getShareCode();
-    }
+	}
+	getLocation(lat, lng) {
+		let {token} = this.state;
+		const _this = this;
+		let qqmapsdk = new QQMapWX({
+			key: 'NKSBZ-7F6R4-DYRUM-DFVXT-3EF2T-LMFPR'
+		});
+		qqmapsdk.reverseGeocoder({
+			//位置坐标，默认获取当前位置，非必须参数
+			location: `${lat},${lng}`, //获取表单传入的位置坐标,不填默认当前位置,示例为string格式
+			get_poi: 0, //是否返回周边POI列表：1.返回；0不返回(默认),非必须参数
+			success: async (res) =>{//成功后的回调
+				if(res.message =="query ok" ){
+					let config={
+						url: '/api/user/syncUserInfo',
+						headers:{
+							Authorization:token
+						},
+						data:{
+							country: res.result.address_component.district,
+							province: res.result.address_component.province,
+							city: res.result.address_component.city,
+						},
+						isLoad:true
+					}
+					let $$res= await http.POST(config);
+					if($$res.code == 200){
+						// this.getUserInfo()
+					}else{
+						Utils.msg($$res.msg)
+					}
+					this.getUserInfo()
+				}
+			},
+			fail(error) {
+				console.error(error);
+			},
+			complete(res) {
+				console.log(res);
+			}
+		})
+	}
     async handleUserInfo(event) {
         let $res = await Taro.getUserInfo();
-        let {token} = this.state;
+		let {token} = this.state;
 		let config={
 			url: '/api/user/syncUserInfo',
 			headers:{
@@ -57,7 +103,10 @@ export default class UCenter extends Component {
 		}
 		let $$res= await http.POST(config);
 		if($$res.code == 200){
-            this.getUserInfo()
+			let $res = await Taro.getLocation({
+				type: "wgs84", //	否	wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
+			})
+			this.getLocation($res.latitude, $res.longitude);
 		}else{
 			Utils.msg($$res.msg)
 		}
@@ -214,9 +263,69 @@ export default class UCenter extends Component {
                     <View className='user-info-list'>
                         <View className='nickname'>{user_info.nickName}</View>
                         <View className='cityname'>{user_info.country}</View>
-
                     </View>
                 </View>
+				{
+					user_info.nickName&&
+					<View className='m-info'>
+						<View className="u-cell line-bottom">
+							<View className="u-cell_title">
+								昵称:
+							</View>
+							<View className="u-cell_value" >
+								<View className='text'>{user_info.nickName}</View>
+							</View>
+							<View className="u-cell_arrow">
+								<Image  className='img' src={detailIcon}/>
+							</View>
+						</View>
+						<View className="u-cell line-bottom">
+							<View className="u-cell_title">
+								性别:
+							</View>
+							<View className="u-cell_value" >
+								<View className='text'>{user_info.gender== 1?'男':'女'}</View>
+							</View>
+							<View className="u-cell_arrow">
+								<Image  className='img' src={detailIcon}/>
+							</View>
+						</View>
+						<View className="u-cell line-bottom">
+							<View className="u-cell_title">
+								手机:
+							</View>
+							<View className="u-cell_value" >
+								<View className='text'>{user_info.mobile}</View>
+							</View>
+							<View className="u-cell_arrow">
+								<Image  className='img' src={detailIcon}/>
+							</View>
+						</View>
+						<View className="u-cell line-bottom">
+							<View className="u-cell_title">
+								地区:
+							</View>
+							<View className={classNames('u-cell_value', { 'dark': !user_info.country && !user_info.city})} >
+								<View className='text'>{user_info.city} {user_info.country}</View>
+							</View>
+							<View className="u-cell_arrow">
+								<Image  className='img' src={detailIcon}/>
+							</View>
+						</View>
+						<View className="u-cell line-bottom">
+							<View className="u-cell_title">
+								简介:
+							</View>
+							<View className={classNames('u-cell_value', { 'dark': !user_info.introduction  })} >
+								<View className='text'>{user_info.introduction || '您还没填写简介哦'}</View>
+							</View>
+							<View className="u-cell_arrow">
+								<Image  className='img' src={detailIcon}/>
+							</View>
+						</View>
+					</View>
+
+				}
 				{
 					user_info.isAdmin == 1 &&
 					<Button className='share_btn' onClick={ this.handleCreateShareImg.bind(this)}>分享</Button>

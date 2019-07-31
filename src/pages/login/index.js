@@ -4,7 +4,7 @@ import './index.scss'
 import logo from '@/assets/logo.png'
 import Utils from '@/utils/index'
 import http from '@/utils/http';
-import QQMapWX from '@/utils/qqmap-wx-jssdk.js';
+
 export default class Login extends Component {
 
 	config = {
@@ -15,7 +15,8 @@ export default class Login extends Component {
 		super()
 		this.state = {
 			mobile:'13262057521',
-			password:'123456'
+			password:'123456',
+			secret:'',
 		}
 	}
 	//分享
@@ -28,39 +29,22 @@ export default class Login extends Component {
 		this.getAuthOpenId()
 	}
 
-	componentDidMount() { }
+	componentDidMount() {
+
+	}
 
 	componentWillUnmount() { }
 
 	async componentDidShow() {
-		Utils.session('token')&&Taro.switchTab({url:'/pages/folder/index'})
-		let $res = await Taro.getLocation({
-			type: "wgs84", //	否	wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
+		let { params} = this.$router
+		this.setState({
+			secret:params.sence||''
 		})
-		this.getLocation($res.latitude, $res.longitude)
+		// Utils.session('token')&&Taro.switchTab({url:'/pages/folder/index'})
+
 	}
 	componentDidHide() { }
-	getLocation(lat, lng) {
-		const _this = this;
-		let qqmapsdk = new QQMapWX({
-			key: 'NKSBZ-7F6R4-DYRUM-DFVXT-3EF2T-LMFPR'
-		});
-		qqmapsdk.reverseGeocoder({
-			//位置坐标，默认获取当前位置，非必须参数
-			location: `${lat},${lng}`, //获取表单传入的位置坐标,不填默认当前位置,示例为string格式
-			//get_poi: 1, //是否返回周边POI列表：1.返回；0不返回(默认),非必须参数
-			success(res) {//成功后的回调
-				console.log(res);
 
-			},
-			fail(error) {
-				console.error(error);
-			},
-			complete(res) {
-				console.log(res);
-			}
-		})
-	}
 	async getAuthOpenId() {
 		try{
 			let res = await Taro.login();
@@ -100,7 +84,7 @@ export default class Login extends Component {
 	}
 
 	async handleUserLogin() {
-		let { openid, mobile, password } = this.state;
+		let { openid, mobile, password,secret } = this.state;
 		if (!openid) {
 			Utils.msg('未获取到您的openId袄');
 			return
@@ -118,7 +102,6 @@ export default class Login extends Component {
 			return
 		}
 		try{
-			let time = Math.ceil(new Date().getTime())
 			let config = {
 				url: '/api/user/login',
 				data: {
