@@ -28,7 +28,8 @@ export default class Folder extends Component {
             keyWords:'',
             modal_index:1, // 1重命名 2.新建文件夹
             modal_name:'重命名',
-            noteId:null
+			noteId:null,
+			serach_list:[],
         }
         this.editorCtx = null; // 编辑器上下文
     }
@@ -223,7 +224,8 @@ export default class Folder extends Component {
     handleTogglePup(){
         const { isPupShow} =this.state;
         this.setState({
-            isPupShow:!isPupShow
+			isPupShow:!isPupShow,
+			noteIndexName:''
         })
         !isPupShow ? Taro.hideTabBar():setTimeout(()=>{Taro.showTabBar()},400) ;
     }
@@ -257,8 +259,22 @@ export default class Folder extends Component {
 		}
 		let $res= await http.POST(config);
 		if($res.code == 200){
-			console.log($res)
-
+			let list = $res.data;
+			let serach_list =[]
+			list.map((item,index)=>{
+				serach_list.push({
+					options: [],
+					isOpened: false,
+					title:item.title,
+					time: Utils.formatTime(item.created_at),
+					id:item.id,
+					isDir:item.isDir,
+					dirId:item.dirId
+				})
+			})
+			this.setState({
+				serach_list
+			})
 		}
 	}
     handleClearKeyWords(){
@@ -289,7 +305,7 @@ export default class Folder extends Component {
     }
     componentDidHide() { }
     render() {
-        let { config,isPupShow,keyWords,isOpened ,modal_name,modal_index} = this.state;
+        let { config,isPupShow,keyWords,isOpened ,modal_name,modal_index,serach_list} = this.state;
         return (
             <View className='page-folder'>
                 <View className='header'>
@@ -300,33 +316,73 @@ export default class Folder extends Component {
                         <Text className='iconfont icon-guanbi' onClick={this.handleClearKeyWords.bind(this)}></Text>
                     }
                 </View>
-                {
-                    config.map((item, index) => (
-                        <SwipeAction
-							index={index}
-							key={index}
-                            onOpened={this.handleSingle.bind(this,index,item)}
-                            isOpened={item.isOpened}
-                            options={item.options}
-                            onClick={this.handleClick}
-                        >
-                            <View className='u-cell-item' onClick={this.goNoteList.bind(this,item)}>
-                                <View className='u-cell_title'>
-                                    {
-										item.isDir == 1 ?
-                                        <Image src={folder} className='icon'></Image>
-										:
-										<Image src={note_icon} className='icon'></Image>
-									}
-                                </View>
-                                <View className='u-cell_value'>
-                                    <View className='title'>{item.title}</View>
-                                    <View className='time'>{item.time}</View>
-                                </View>
-                            </View>
-                        </SwipeAction>
-                    ))
-                }
+				<View className='folder_list'>
+					{
+						config.map((item, index) => (
+							<SwipeAction
+								index={index}
+								key={index}
+								onOpened={this.handleSingle.bind(this,index,item)}
+								isOpened={item.isOpened}
+								options={item.options}
+								onClick={this.handleClick}
+							>
+								<View className='u-cell-item' onClick={this.goNoteList.bind(this,item)}>
+									<View className='u-cell_title'>
+										{
+											item.isDir == 1 ?
+											<Image src={folder} className='icon'></Image>
+											:
+											<Image src={note_icon} className='icon'></Image>
+										}
+									</View>
+									<View className='u-cell_value'>
+										<View className='title'>{item.title}</View>
+										<View className='time'>{item.time}</View>
+									</View>
+								</View>
+							</SwipeAction>
+						))
+					}
+				</View>
+				{
+					keyWords.length > 0 &&
+					<View className='search_list'>
+						{
+							serach_list.length == 0?
+							<View className='nodata'>
+								<Image src={nodata} className='img'></Image>
+								<View className='text'>未检索到文章或文件夹</View>
+							</View>
+							:
+							serach_list.map((item, index) => (
+								<SwipeAction
+									index={index}
+									key={index}
+									onOpened={this.handleSingle.bind(this,index,item)}
+									isOpened={item.isOpened}
+									options={item.options}
+									onClick={this.handleClick}
+								>
+									<View className='u-cell-item' onClick={this.goNoteList.bind(this,item)}>
+										<View className='u-cell_title'>
+											{
+												item.isDir == 1 ?
+												<Image src={folder} className='icon'></Image>
+												:
+												<Image src={note_icon} className='icon'></Image>
+											}
+										</View>
+										<View className='u-cell_value'>
+											<View className='title'>{item.title}</View>
+											<View className='time'>{item.time}</View>
+										</View>
+									</View>
+								</SwipeAction>
+							))
+						}
+					</View>
+				}
                 {
                     config.length == 0&&
                     <View className='nodata'>
@@ -367,9 +423,12 @@ export default class Folder extends Component {
                         <Input className='input' value={noteIndexName} adjustPosition placeholder="请输入文件夹名字"  onInput={this.handleNoteRename.bind(this)} />
                     </View>
                 </Modal>
-                <View className='open_btn' onClick={this.handleTogglePup.bind(this)}>
-                    <Text className='iconfont icon-jiahao icon'></Text>
-                </View>
+				{
+					keyWords.length == 0 &&
+					<View className='open_btn' onClick={this.handleTogglePup.bind(this)}>
+						<Text className='iconfont icon-jiahao icon'></Text>
+					</View>
+				}
             </View>
         )
     }

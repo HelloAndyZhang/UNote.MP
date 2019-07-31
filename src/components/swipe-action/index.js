@@ -162,8 +162,8 @@ export default class SwipeAction extends Component {
 		this.handleClosed()
 	}
 
-	handleDomInfo = ({ width }) => {
-        
+	handleDomInfo = ({ width=0 }) => {
+
 		const { _isOpened } = this.state
 		this.maxOffsetSize = width
 		this._reset(_isOpened)
@@ -185,7 +185,7 @@ export default class SwipeAction extends Component {
 			this,
 			`#swipeActionOptions-${this.state.componentId}`
 		).then(res => {
-			this.handleDomInfo(res[0])
+			this.handleDomInfo(res[0]||0)
 		})
 	}
 	render() {
@@ -246,7 +246,7 @@ SwipeAction.defaultProps = {
 	disabled: false,
 	autoClose: false
   }
-  
+
 SwipeAction.propTypes = {
 	isTest: PropTypes.bool,
 	isOpened: PropTypes.bool,
@@ -263,7 +263,7 @@ SwipeAction.propTypes = {
 		])
 	  })
 	),
-  
+
 	onClick: PropTypes.func,
 	onOpened: PropTypes.func,
 	onClosed: PropTypes.func

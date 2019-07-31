@@ -33,7 +33,7 @@ export default class Login extends Component {
 	componentWillUnmount() { }
 
 	async componentDidShow() {
-		// Utils.session('token')&&Taro.switchTab({url:'/pages/index/index'})
+		Utils.session('token')&&Taro.switchTab({url:'/pages/folder/index'})
 		let $res = await Taro.getLocation({
 			type: "wgs84", //	否	wgs84 返回 gps 坐标，gcj02 返回可用于 wx.openLocation 的坐标
 		})
