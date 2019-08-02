@@ -14,8 +14,9 @@ export default class Login extends Component {
 	constructor() {
 		super()
 		this.state = {
-			mobile:'13262057521',
-			password:'123456',
+			mobile:'',
+			password:'',
+			openid:'oP_kZ49QR1_yIlX8ITCpxfBdLwF0',
 			secret:'',
 		}
 	}
@@ -59,7 +60,7 @@ export default class Login extends Component {
 				let $res = await http.POST(config);
 				Utils.session('openid', $res.openId)
 				this.setState({
-					openid: $res.openId
+					openid: $res.openId||'oP_kZ4-uhMwAEQOyb_voSZzSDPGY'
 				})
 			} else {
 				Utils.msg('授权失败袄');
@@ -85,6 +86,7 @@ export default class Login extends Component {
 
 	async handleUserLogin() {
 		let { openid, mobile, password,secret } = this.state;
+		console.log(openid)
 		if (!openid) {
 			Utils.msg('未获取到您的openId袄');
 			return
@@ -108,7 +110,7 @@ export default class Login extends Component {
 					openid,
 					mobile,
 					password,
-					secret:`6fc27bd0b2a711e9863fa9e0bf592030`
+					secret:""
 				},
 				isLoad: true
 			}
