@@ -66,7 +66,6 @@ class App extends Component {
 	componentDidMount() {
 		let { scene } = this.$router.params.query;
 		console.log(this.$router.params)
-		console.log(scene);
 		if(scene){
 			Utils.session('secret',scene)
 		}

@@ -9,7 +9,8 @@ page{
 }
 .u-cell-item{
     background: #fff;
-    @include active();
+	@include active();
+
     .item{
         padding:22px 30px;
         border-bottom: 1px solid #f5f5f5;
@@ -18,7 +19,8 @@ page{
             line-height: 28px;
             font-size: 28px;
             color: rgba(0,0,0,.88);
-            vertical-align: middle;
+			vertical-align: middle;
+			@include line(1);
         }
         .time{
             margin-top: 12px;

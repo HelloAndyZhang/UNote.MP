@@ -11,7 +11,7 @@ export default class Folder extends Component {
         addGlobalClass: true
     }
     config = {
-        navigationBarTitleText: '文件夹',
+        navigationBarTitleText: '新建笔记',
         enablePullDownRefresh: false,
     }
     constructor(props) {
@@ -21,15 +21,15 @@ export default class Folder extends Component {
             formatlist: [{
                 style: 'icon-zitijiacu',
                 key: 'bold',
-                value: ''
+                value: 'strong'
             }, {
                 style: 'icon-zitibiaoti',
-                key: 'italic',
+                key: 'header',
                 value: ''
             }, {
                 style: 'icon-zitixieti',
                 key: 'italic',
-                value: ''
+                value: 'em'
             }, {
                 style: 'icon-zuoduiqi',
                 key: 'align',
@@ -65,7 +65,6 @@ export default class Folder extends Component {
         this.editorCtx = null; // 编辑器上下文
     }
     //分享
-    //分享
     onShareAppMessage() {
         return {
 			title:'记录 成为更好的自己',
@@ -96,11 +95,12 @@ export default class Folder extends Component {
         this.editorCtx.format(item.key, item.value)
     }
     onStatusChange(event) {
-      if( Object.keys(event.detail).length>0){
+		console.log(event)
+    //   if( Object.keys(event.detail).length>0){
           this.setState({
               editorFormat: event.detail
           })
-        }
+        // }
     }
     async onEditorReady() {
         const res = await delayQuerySelectorCtx(this, '#editor');
@@ -205,7 +205,7 @@ export default class Folder extends Component {
 
     componentDidHide() { }
     render() {
-        let { formatlist,editorFormat,title } = this.state;
+        let { formatlist,editorFormat,title} = this.state;
         return (
             <View className='page-create'>
                 <View className='header'>
@@ -213,7 +213,7 @@ export default class Folder extends Component {
                         {
                             formatlist.map((item, index) => {
                                 return (
-                                    <Text className={classNames('iconfont tool-bar__item', item.style ,{ 'tool-bar__item': editorFormat[item.key] != '' ? true:false } )} onClick={this.handleEditorFormat.bind(this, item)} index={index}></Text>
+                                    <Text className={classNames('iconfont tool-bar__item', item.style ,{ 'tool-bar__active': (editorFormat[item.key]  ==  item.value) ? true : false } )} onClick={this.handleEditorFormat.bind(this, item)} index={index}></Text>
                                 )
                             })
                         }

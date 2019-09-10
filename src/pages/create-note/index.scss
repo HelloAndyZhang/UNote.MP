@@ -37,7 +37,8 @@
                 transition: all 0.3s ease-in
             }
             &__active{
-              background-color: #e8e8e8;
+			  background-color: #e8e8e8;
+			  color:#0088fb;
             }
         }
     }

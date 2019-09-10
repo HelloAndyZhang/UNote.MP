@@ -31,7 +31,8 @@ const GET = (opt = {}) => {
       dataType:opt.dataType||'json',
       success: res => {
 		if (res.data.code == 401) {
-			Utils.msg('状态获取失败')
+			Utils.msg('登录过期,请重新登录')
+			Utils.removeSession('token')
 			Taro.navigateTo({
 				url:`/pages/login/index`
 			})
@@ -74,7 +75,8 @@ const POST = (opt = {}) => {
       success: (res) => {
         setTimeout(_ => {
           if (res.data.code == 401) {
-			Utils.msg('状态获取失败')
+			Utils.msg('登录过期,请重新登录');
+			Utils.removeSession('token')
 			Taro.navigateTo({
 				url:`/pages/login/index`
 			})

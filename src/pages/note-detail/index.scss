@@ -2,18 +2,20 @@
 .page-detail{
     height: 100%;
     background: #fff;
-    
+
     box-shadow:inset 0px 15px 10px -15px #e5e5e5;
     position: relative;
     .title{
         padding: 0 30px;
         position: absolute;
-        height: 100px;
+		height: 100px;
+
         line-height:100px;
         font-size: 36px;
         color: #333;
         background: #fff;
-        @include hairline-bottom(#e5e5e5);
+		@include hairline-bottom(#e5e5e5);
+		@include line(1);
     }
     .rich_text{
         position: absolute;

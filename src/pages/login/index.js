@@ -17,7 +17,7 @@ export default class Login extends Component {
 		this.state = {
 			mobile:'',
 			password:'',
-			openid:'oP_kZ49QR1_yIlX8ITCpxfBdLwF0',
+			openid:'',
 			secret:'',
 		}
 	}
@@ -42,10 +42,9 @@ export default class Login extends Component {
 	async componentDidShow() {
 		let { params} = this.$router
 		this.setState({
-			secret:params.sence||Utils.session('secret')
+			secret:params.scene||Utils.session('secret')
 		})
-		// Utils.session('token')&&Taro.switchTab({url:'/pages/folder/index'})
-
+		Utils.session('token')&&Taro.switchTab({url:'/pages/index/index'})
 	}
 	componentDidHide() { }
 
@@ -63,7 +62,7 @@ export default class Login extends Component {
 				let $res = await http.POST(config);
 				Utils.session('openid', $res.openId)
 				this.setState({
-					openid: $res.openId||'oP_kZ4-uhMwAEQOyb_voSZzSDPGY'
+					openid: $res.openId
 				})
 			} else {
 				Utils.msg('授权失败袄');
@@ -89,7 +88,6 @@ export default class Login extends Component {
 
 	async handleUserLogin() {
 		let { openid, mobile, password,secret } = this.state;
-		console.log(openid)
 		if (!openid) {
 			Utils.msg('未获取到您的openId袄');
 			return
@@ -113,7 +111,7 @@ export default class Login extends Component {
 					openid,
 					mobile,
 					password,
-					secret:""
+					secret
 				},
 				isLoad: true
 			}
@@ -123,6 +121,7 @@ export default class Login extends Component {
 				this.setState({
 					token: $res.data
 				})
+				Utils.removeSession('secret');
 				Utils.msg('登录成功');
 				setTimeout(() => {
 					Taro.switchTab({
