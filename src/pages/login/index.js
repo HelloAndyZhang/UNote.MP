@@ -5,6 +5,7 @@ import logo from '@/assets/logo.png'
 import shareBg from '@/assets/share_bg_one.jpg'
 import Utils from '@/utils/index'
 import http from '@/utils/http';
+import Weather from '@/components/weather'
 
 export default class Login extends Component {
 
@@ -44,7 +45,7 @@ export default class Login extends Component {
 		this.setState({
 			secret:params.scene||Utils.session('secret')
 		})
-		Utils.session('token')&&Taro.switchTab({url:'/pages/index/index'})
+		// Utils.session('token')&&Taro.switchTab({url:'/pages/index/index'})
 	}
 	componentDidHide() { }
 
@@ -145,6 +146,7 @@ export default class Login extends Component {
 				<View class="logo">
 					<Image src={logo} class="img"></Image>
 				</View>
+				{/* start */}
 				<View class="title">优秀如你 灼灼其华</View>
 				<View class="box">
 					<View class="phone line-bottom">
