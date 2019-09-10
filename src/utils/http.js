@@ -78,7 +78,6 @@ const POST = (opt = {}) => {
         isLoad && Utils.hideLoading();
       },
       fail: err => {
-        console.log('13131313')
         reject(err)
         isLoad && Utils.hideLoading();
         isMsg && Utils.msg('网络异常')

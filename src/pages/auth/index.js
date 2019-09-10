@@ -14,12 +14,15 @@ export default class Index extends Component {
     super()
     this.state = {}
   }
-  //分享
-  onShareAppMessage() {
-    return {
-      title: '我的优笔记',
-    }
-  }
+	//分享
+	onShareAppMessage() {
+		return {
+			title: '我的优笔记',
+			desc:'',
+			path:'pages/login/index',
+			imageUrl:''
+		}
+	}
   componentWillPreload() {
 
   }

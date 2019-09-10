@@ -33,7 +33,10 @@ export default class SubFolder extends Component {
     //分享
     onShareAppMessage() {
         return {
-            title: '我的优笔记',
+			title: '我的优笔记',
+			desc:'',
+			path:'pages/login/index',
+			imageUrl:''
         }
     }
     componentWillPreload() {
