@@ -4,6 +4,7 @@ import './index.scss'
 import classNames from 'classnames';
 import Utils from '@/utils/index'
 import http from '@/utils/http';
+import shareBg from '@/assets/share_bg_one.jpg'
 export default class Note extends Component {
     static options = {
         addGlobalClass: true
@@ -25,10 +26,9 @@ export default class Note extends Component {
     //分享
     onShareAppMessage() {
         return {
-			title: '我的优笔记',
-			desc:'',
+			title:'记录 成为更好的自己',
 			path:'pages/login/index',
-			imageUrl:''
+			imageUrl:shareBg
         }
     }
     componentWillPreload() {

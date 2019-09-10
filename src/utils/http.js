@@ -30,9 +30,16 @@ const GET = (opt = {}) => {
       method: "GET",
       dataType:opt.dataType||'json',
       success: res => {
-        setTimeout(_ => {
-          resolve(res.data)
-        }, 0)
+		if (res.data.code == 401) {
+			Utils.msg('状态获取失败')
+			Taro.navigateTo({
+				url:`/pages/login/index`
+			})
+            return
+        }
+		setTimeout(_ => {
+			resolve(res.data)
+		}, 0)
         isLoad && Utils.hideLoading();
       },
       fail: err => {
@@ -65,10 +72,12 @@ const POST = (opt = {}) => {
       header:editHeaders,
       method: "POST",
       success: (res) => {
-
         setTimeout(_ => {
-          if (res.data.State == -123456) {
-            Utils.msg('状态获取失败')
+          if (res.data.code == 401) {
+			Utils.msg('状态获取失败')
+			Taro.navigateTo({
+				url:`/pages/login/index`
+			})
             return
           }
           if (res.data) {

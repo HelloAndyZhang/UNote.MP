@@ -6,6 +6,8 @@ import http from '@/utils/http';
 import refresh_btn from '@/assets/refresh.png';
 import save_btn from '@/assets/saveImg.png'
 import detailIcon from '@/assets/detail_arrow.png'
+import shareBg from '@/assets/share_bg_one.jpg'
+import shareCardBg from '@/assets/shareCardBg.png'
 import classNames from 'classnames';
 import QQMapWX from '@/utils/qqmap-wx-jssdk.js';
 export default class UCenter extends Component {
@@ -27,10 +29,9 @@ export default class UCenter extends Component {
     //分享
     onShareAppMessage() {
         return {
-			title: '我的优笔记',
-			desc:'',
+			title:'记录 成为更好的自己',
 			path:'pages/login/index',
-			imageUrl:''
+			imageUrl:shareBg
         }
     }
     componentWillPreload() {
@@ -167,11 +168,13 @@ export default class UCenter extends Component {
     handleCreateShareImg(){
         Utils.showLoading()
 		this.drawCanvas()
-
     }
     async drawCanvas() {
-        let {qrcode,user_info} = this.state;
-        let  shareBg = await Utils.downLoadImg('https://otherfiles-ali.uupt.com/Stunner/FE/SecKill/shop-share-save-edit1.png');
+		let {qrcode,user_info} = this.state;
+        let  shareBg = {
+			data:shareCardBg
+		};
+		// await Utils.downLoadImg(shareCardBg)
         let avatarBg = await Utils.downLoadImg(user_info.avatarUrl);
         let $res = await Taro.getSystemInfoSync();
         let pixelRatio = $res.pixelRatio;

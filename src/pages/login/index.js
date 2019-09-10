@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import { View, Image, Button, RichText } from '@tarojs/components'
 import './index.scss'
 import logo from '@/assets/logo.png'
+import shareBg from '@/assets/share_bg_one.jpg'
 import Utils from '@/utils/index'
 import http from '@/utils/http';
 
@@ -23,10 +24,9 @@ export default class Login extends Component {
     //分享
     onShareAppMessage() {
         return {
-			title: '我的优笔记',
-			desc:'',
+			title:'记录 成为更好的自己',
 			path:'pages/login/index',
-			imageUrl:''
+			imageUrl:shareBg
         }
     }
 	componentWillMount() {
@@ -42,7 +42,7 @@ export default class Login extends Component {
 	async componentDidShow() {
 		let { params} = this.$router
 		this.setState({
-			secret:params.sence||''
+			secret:params.sence||Utils.session('secret')
 		})
 		// Utils.session('token')&&Taro.switchTab({url:'/pages/folder/index'})
 
