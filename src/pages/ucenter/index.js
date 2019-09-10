@@ -330,7 +330,6 @@ export default class UCenter extends Component {
 							</View>
 						</View>
 					</View>
-
 				}
 				{
 					user_info.isAdmin == 1 &&

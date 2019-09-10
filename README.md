@@ -134,27 +134,6 @@ $ npx taro build --type alipay --watch
 $ npx taro build --type alipay
 ```
 
-### 字节跳动小程序
-
-选择字节跳动小程序模式，需要自行下载并打开[字节跳动小程序开发者工具](https://microapp.bytedance.com/docs/devtool/versionUpdate.html)，然后在项目编译完后选择项目根目录下 `dist` 目录进行预览。
-
-字节跳动小程序编译预览及打包（去掉 --watch 将不会监听文件修改，并会对代码进行压缩打包）
-
-```bash
-# yarn
-$ yarn dev:tt
-$ yarn build:tt
-# npm script
-$ npm run dev:tt
-$ npm run build:tt
-# 仅限全局安装
-$ taro build --type tt --watch
-$ taro build --type tt
-# npx 用户也可以使用
-$ npx taro build --type tt --watch
-$ npx taro build --type tt
-```
-
 ### H5
 
 H5 模式，无需特定的开发者工具，在执行完下述命令之后即可通过浏览器进行预览
@@ -185,20 +164,6 @@ $ taro build --type h5
 $ npx taro build --type h5
 ```
 
-### React Native
-
-React Native 端运行需执行如下命令，React Native 端相关的运行说明请参见 [React Native 教程](https://nervjs.github.io/taro/docs/react-native.html)
-
-```bash
-# yarn
-$ yarn dev:rn
-# npm script
-$ npm run dev:rn
-# 仅限全局安装
-$ taro build --type rn --watch
-# npx 用户也可以使用
-$ npx taro build --type rn --watch
-```
 
 ## 更新
 
@@ -219,10 +184,10 @@ yarn global add @tarojs/cli@latest
 
 ```bash
 $ taro update project
+
 ```
 
 ## 环境及依赖检测
-Taro 提供了命令来一键检测 Taro 环境及依赖的版本等信息，方便大家查看项目的环境及依赖，排查环境问题。在提 issue 的时候，请附上 `taro info` 打印的信息，帮助开发人员快速定位问题。
 
 ```bash
 $ taro info
