@@ -1,0 +1,28 @@
+@import '../../styles/index';
+@mixin size($size) {
+	width: $size;
+	height: $size;
+}
+@mixin abs-pos {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.weather{
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+	/* elements */
+	&__sunny {
+
+
+
+	}
+	&__rain{
+
+	}
+
+
+}

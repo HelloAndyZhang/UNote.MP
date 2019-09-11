@@ -4,43 +4,36 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import './index.scss'
 
-import { uuid,  } from '@/utils/dom'
-
+import { uuid,delayQuerySelectorCtx,delayQuerySelector} from '@/utils/dom'
 
 export default class Weather extends Component {
 	static options = {
 		addGlobalClass: true
 	}
-	static defaultProps ={
+	static defaultProps = {
 		options: [],
 		isOpened: false,
 	}
 	constructor(props) {
 		super(...arguments)
-		const { isOpened } = props
 		this.state = {
-			componentId:uuid(),
-			_isOpened: isOpened
+
 		}
 	}
-    componentWillMount(){
-
-    }
-
-
-	componentWillReceiveProps(nextProps) {
+	async componentWillMount() {
 
 	}
+	componentDidMount(){
 
+	}
 	render() {
-		const rootClass = classNames('weather', this.props.className)
+		const rootClass = classNames('weather')
 		return (
 			<View
-				id={`weather-${componentId}`}
 				className={rootClass}
-			 	>
-				<View className="weather__sunny">
-					<View className="sun"></View>
+			>
+				<View className="weather__rain">
+
 				</View>
 			</View>
 		)

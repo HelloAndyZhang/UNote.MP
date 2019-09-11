@@ -20,7 +20,8 @@ class App extends Component {
 			'pages/create-note/index',
 			'pages/note-detail/index',
 			'pages/auth/index',
-			'pages/sub-folder/index'
+			'pages/sub-folder/index',
+			'pages/weather/index'
 		],
 		window: {
 			backgroundTextStyle: 'dark',

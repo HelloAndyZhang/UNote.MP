@@ -10,6 +10,7 @@ import shareBg from '@/assets/share_bg_one.jpg'
 import shareCardBg from '@/assets/shareCardBg.png'
 import classNames from 'classnames';
 import QQMapWX from '@/utils/qqmap-wx-jssdk.js';
+
 export default class UCenter extends Component {
     config = {
         navigationBarTitleText: '我的',
@@ -74,9 +75,9 @@ export default class UCenter extends Component {
 							Authorization:token
 						},
 						data:{
-							country: res.result.address_component.district,
-							province: res.result.address_component.province,
-							city: res.result.address_component.city,
+							country:res.result.address_component.district,
+							province:res.result.address_component.province,
+							city:res.result.address_component.city,
 						},
 						isLoad:true
 					}
@@ -213,15 +214,6 @@ export default class UCenter extends Component {
             share_img:false,
         })
     }
-    // 文字换行
-    /**
-     * ctx,画布对象
-     * str,需要绘制的文字
-     * splitLen,切割的长度字符串
-     * strHeight,每行文字之间的高度
-     * x,位置
-     * y
-     */
     fontLineFeed(ctx, str, splitLen, strHeight, x, y) {
         let strArr = [];
         for (let i = 0, len = str.length / splitLen; i < len; i++) {
@@ -267,8 +259,8 @@ export default class UCenter extends Component {
 
                     </View>
                     <View className='user-info-list'>
-                        <View className='nickname'>{user_info.nickName}</View>
-                        <View className='cityname'>{user_info.country}</View>
+                        <View className='nickname'>{user_info.nickName || ''}</View>
+                        <View className='cityname'>{user_info.country || ''}</View>
                     </View>
                 </View>
 				{

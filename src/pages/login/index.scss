@@ -18,7 +18,7 @@
 }
 
 .logo {
-  padding-top: 160px;
+  padding-top:100px;
   margin: 0 auto;
   height: 120px;
   width: 120px;
@@ -31,10 +31,16 @@
 }
 
 .title {
-  font-size: 45px;
+  font-size:48px;
   text-align: center;
-  margin-top: 35px;
+  margin-top:20px;
   color: #333;
+}
+.sub_title{
+    color: #595959;
+    margin-top:10px;
+	font-size:30px;
+	text-align: center;
 }
 
 .placeholder {

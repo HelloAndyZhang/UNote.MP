@@ -140,22 +140,22 @@ export default class Login extends Component {
 		}
 	}
 	render() {
-		let { mobile, password } = this.state;
+		let { mobile, password} = this.state;
 		return (
-			<View class="page-login">
-				<View class="logo">
+			<View className="page-login">
+				<View className="logo">
 					<Image src={logo} class="img"></Image>
 				</View>
-				{/* start */}
-				<View class="title">优秀如你 灼灼其华</View>
-				<View class="box">
-					<View class="phone line-bottom">
+				<View className="title">我的优笔记</View>
+				<View className='sub_title'>优秀如你 灼灼其华</View>
+				<View className="box">
+					<View className="phone line-bottom">
 						<Input type='number' placeholder='请输入手机号码' value={mobile} onInput={this.handleMobileInput.bind(this)} placeholderStyle="placeholder" maxLength='11' />
 					</View>
-					<View class="phone line-bottom">
+					<View className="phone line-bottom">
 						<Input type='password' placeholder='请输入密码' value={password} onInput={this.handlePwdInput.bind(this)} placeholderStyle="placeholder" maxLength='11' />
 					</View>
-					<Button class="btn" onClick={this.handleUserLogin.bind(this)}>登录</Button>
+					<Button className="btn" onClick={this.handleUserLogin.bind(this)}>登录</Button>
 				</View>
 			</View>
 		)
