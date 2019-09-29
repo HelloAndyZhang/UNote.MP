@@ -31,7 +31,7 @@ export default class Login extends Component {
         }
     }
 	componentWillMount() {
-		this.getAuthOpenId()
+		// this.getAuthOpenId()
 	}
 
 	componentDidMount() {
@@ -41,10 +41,10 @@ export default class Login extends Component {
 	componentWillUnmount() { }
 
 	async componentDidShow() {
-		let { params} = this.$router
-		this.setState({
-			secret:params.scene||Utils.session('secret')
-		})
+		// let { params} = this.$router
+		// this.setState({
+		// 	secret:params.scene||Utils.session('secret')
+		// })
 		// Utils.session('token')&&Taro.switchTab({url:'/pages/index/index'})
 	}
 	componentDidHide() { }
@@ -88,6 +88,10 @@ export default class Login extends Component {
 	}
 
 	async handleUserLogin() {
+		Taro.navigateTo({
+			url:`/pages/map/index`
+		})
+		return
 		let { openid, mobile, password,secret } = this.state;
 		if (!openid) {
 			Utils.msg('未获取到您的openId袄');

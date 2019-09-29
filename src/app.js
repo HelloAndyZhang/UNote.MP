@@ -21,13 +21,15 @@ class App extends Component {
 			'pages/note-detail/index',
 			'pages/auth/index',
 			'pages/sub-folder/index',
-			'pages/weather/index'
+			'pages/weather/index',
+			'pages/map/index'
 		],
 		window: {
 			backgroundTextStyle: 'dark',
 			navigationBarBackgroundColor: '#fff',
 			navigationBarTitleText: '我的优笔记',
 			navigationBarTextStyle: 'black',
+			enableInPageRender: "YES",  // 同层渲染
 		},
 		tabBar: {
 			color: '#D9DCE0',
@@ -65,8 +67,8 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		let { scene } = this.$router.params.query;
-		console.log(this.$router.params)
+		let { scene =0 } = this.$router.params.query|| this.$router.params;
+		console.log(scene)
 		if(scene){
 			Utils.session('secret',scene)
 		}
