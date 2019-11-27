@@ -42,6 +42,7 @@ export default class MapT extends Component {
 	componentWillUnmount() { }
 
 	componentDidShow() {
+		debugger;
 		my.createIntersectionObserver().relativeToViewport({top: 100, bottom: 100}).observe('.state-name', (res) => {
 			console.log(res, 'intersectionObserver');
 			console.log(res.intersectionRatio); // 相交区域占目标节点的布局区域的比例
